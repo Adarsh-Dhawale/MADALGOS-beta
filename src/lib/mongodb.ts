@@ -27,6 +27,7 @@ export async function connectDB(): Promise<typeof mongoose> {
 
   if (!cached.promise) {
     cached.promise = mongoose.connect(uri, {
+      dbName: process.env.MONGODB_DB_NAME ?? "MADAlgos-new-databse",
       serverSelectionTimeoutMS: 5_000,
       connectTimeoutMS: 5_000,
       socketTimeoutMS: 5_000,

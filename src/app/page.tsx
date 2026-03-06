@@ -1,5 +1,3 @@
-"use client";
-
 import React from "react";
 import Header from "@/components/sections/header";
 import Hero from "@/components/sections/hero";
@@ -15,8 +13,43 @@ import BlogsSection from "@/components/sections/blogs-section";
 import Testimonials from "@/components/sections/testimonials";
 import FAQ from "@/components/sections/faq";
 import Footer from "@/components/sections/footer";
+import {
+  getAllBlogs,
+  formatBlogDate,
+  getAuthorDisplayName,
+  getPlainTextExcerpt,
+} from "@/lib/blogs";
+import {
+  getAllMentors,
+  getMentorCompaniesLine,
+  getMentorDisplayName,
+  getMentorHeadline,
+} from "@/lib/mentors";
 
-export default function Home() {
+export default async function Home() {
+  const [blogsFromDb, mentorsFromDb] = await Promise.all([
+    getAllBlogs(),
+    getAllMentors(),
+  ]);
+
+  const blogs = blogsFromDb.slice(0, 6).map((b) => ({
+    id: b.id,
+    title: b.title,
+    author: getAuthorDisplayName(b),
+    date: formatBlogDate(b.publishDate),
+    image: b.bannerImageLink,
+    excerpt: getPlainTextExcerpt(b.descriptionDetails, 170),
+  }));
+
+  const mentors = mentorsFromDb.slice(0, 10).map((m) => ({
+    id: m.id,
+    name: getMentorDisplayName(m),
+    role: getMentorHeadline(m),
+    company: getMentorCompaniesLine(m),
+    image: m.interviewer?.dispImageLink ?? null,
+    isVerified: m.isVerified,
+  }));
+
   return (
     <div className="flex flex-col bg-background text-foreground antialiased font-sans selection:bg-primary/30">
       <Header />
@@ -39,9 +72,9 @@ export default function Home() {
             <Curriculum />
             <LearningBeyondClassroom />
             <AlumniSection />
-            <FacultySection />
+            <FacultySection mentors={mentors} />
             <DifferentiationSection />
-            <BlogsSection />
+            <BlogsSection blogs={blogs} />
             <Testimonials />
             <FAQ />
           </div>

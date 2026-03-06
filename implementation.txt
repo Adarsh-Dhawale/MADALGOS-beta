@@ -1,0 +1,279 @@
+MADALGOS IMPLEMENTATION OVERVIEW
+================================
+
+This document explains how the main APIs, data flow, and pages in the MADAlgos Next.js app work so new developers can quickly understand and extend the project.
+
+Stack overview
+--------------
+- Framework: Next.js App Router (React, TypeScript)
+- Styling: Tailwind CSS + custom utility classes
+- Animations: framer-motion
+- Icons: lucide-react
+- Database: Azure Cosmos DB (MongoDB API) via Mongoose
+- Email: SendGrid (via server route)
+- Captcha: Google reCAPTCHA v2
+
+Environment and database
+------------------------
+- Connection string: MONGODB_URI (Cosmos DB Mongo connection)
+- Database name: configured in `src/lib/mongodb.ts`
+  - Uses `process.env.MONGODB_DB_NAME` if set
+  - Otherwise defaults to `MADAlgos-new-databse`
+- Connection helper: `src/lib/mongodb.ts`
+  - `connectDB()`:
+    - Caches the Mongoose connection to avoid reconnecting per request
+    - Applies short timeouts to avoid long DNS/TCP hangs
+    - Sets `dbName` so all models share the same logical database
+
+Main collections (Cosmos DB)
+----------------------------
+1. blogs
+   - Backed by Mongoose model in `src/models/Blog.ts`
+   - Contains all blog metadata and full HTML content
+
+2. mentors
+   - Backed by Mongoose model in `src/models/Mentor.ts`
+   - Contains all mentor profile data (career history, skills, pricing, ratings, etc.)
+
+3. ContactInquiry
+   - Backed by `src/models/ContactInquiry.ts`
+   - Stores lead records from the contact-us form (name, email, subject, message, phone, timestamps)
+
+Data helper layers
+------------------
+All pages call into thin "lib" helpers which hide the Mongoose details.
+
+Blogs
+~~~~~
+File: `src/lib/blogs.ts`
+
+Exports:
+- `getAllBlogs(): Promise<Blog[]>`
+  - `await connectDB()`
+  - `BlogModel.find().sort({ publishDate: -1 }).lean().exec()`
+- `getBlogById(id: number): Promise<Blog | null>`
+  - `await connectDB()`
+  - `BlogModel.findOne({ id }).lean().exec()`
+- `formatBlogDate(dateStr: string): string`
+  - Formats dates as `DD Mon YYYY` for UI
+- `getAuthorDisplayName(blog: Blog): string`
+  - Uses `blog.authorDetails` if present, otherwise falls back to "MadAlgos"
+- `getPlainTextExcerpt(html: string, maxLength?: number): string`
+  - Strips HTML tags, normalizes whitespace, truncates to `maxLength` and appends ellipsis
+
+Mentors
+~~~~~~~
+File: `src/lib/mentors.ts`
+
+Exports:
+- `getAllMentors(): Promise<Mentor[]>`
+  - `await connectDB()`
+  - `MentorModel.find({ isActive: true, approvalStatus: "APPROVED" }).sort({ joiningDate: -1 }).lean().exec()`
+- `getMentorById(id: number): Promise<Mentor | null>`
+  - `await connectDB()`
+  - `MentorModel.findOne({ id }).lean().exec()`
+- `getMentorDisplayName(mentor: Mentor): string`
+  - Uses embedded `interviewer` (first/last name), falls back to `profileId`
+- `getMentorHeadline(mentor: Mentor): string`
+  - Builds "Role at Company" from `careerHistory.currentCompany`
+- `getMentorCompaniesLine(mentor: Mentor): string`
+  - Returns unique list of current + previous companies joined with ` | `
+- `getMentorRating(mentor: Mentor): { avg: number; count: number }`
+  - Aggregates ratings from embedded `mentorFeedback`
+- `formatMentorJoinedDate(dateStr: string): string`
+  - Formats as `Mon YYYY` for "Joined" labels
+
+API routes
+----------
+
+1) Contact form: `/api/contact`
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+File: `src/app/api/contact/route.ts`
+Method: `POST`
+
+Responsibilities:
+- Validate and verify Google reCAPTCHA token
+  - Reads `RECAPTCHA_SECRET_KEY` from environment
+  - Sends token to `https://www.google.com/recaptcha/api/siteverify`
+  - If verification fails, returns `400 { error: "ReCAPTCHA verification failed." }`
+- Optional rate limiting
+  - Based on identity (e.g., IP/email) to avoid spam; responds with
+    `429 { error: "You have already sent a message recently. Please try again later." }`
+- Store lead in Cosmos DB
+  - Calls `connectDB()`
+  - Uses `ContactInquiry` Mongoose model to `.create(...)`
+  - Wrapped in `try/catch`: if DB write fails, it logs but does NOT block email sending
+- Send notification email via SendGrid
+  - Uses SendGrid dev key from env (e.g., `SendGridDevKey`)
+  - Uses fixed from/to:
+    - `from: "helpdesk@MADAlgos.in"`
+    - `to: "contact@madalgos.in"`
+  - On failure: logs `Email failed to send` and returns `500 { error: "Failed to send message" }`
+- Response semantics
+  - On success (reCAPTCHA ok, email accepted), returns `201 { message: "Message sent successfully" }`
+  - Frontend uses this message to show status under the contact form
+
+Note on initial JSON data
+~~~~~~~~~~~~~~~~~~~~~~~~~
+Originally, blog and mentor content lived in local JSON files (`blogs-temp-data.json` and `mentors-data-temp.json`) and a temporary seed API was used to import them into Cosmos DB.
+Those JSON files and the seed API have now been removed. The **database is the single source of truth** for blogs and mentors; if you need to backfill or migrate data in the future, create a new one-off script or API that writes directly to the `blogs` and `mentors` collections using the models in `src/models/Blog.ts` and `src/models/Mentor.ts`.
+
+Pages and how they fetch data
+-----------------------------
+
+Home: `/`
+~~~~~~~~~
+File: `src/app/page.tsx`
+Type: Server component (`async function Home()`).
+
+Data flow:
+- In parallel:
+  - `const [blogsFromDb, mentorsFromDb] = await Promise.all([getAllBlogs(), getAllMentors()]);`
+- Transform:
+  - Blogs:
+    - Take first 6
+    - Map to `{ id, title, author, date, image, excerpt }`
+    - `author` via `getAuthorDisplayName`
+    - `date` via `formatBlogDate`
+    - `excerpt` via `getPlainTextExcerpt(descriptionDetails, 170)`
+  - Mentors:
+    - Take first 10
+    - Map to `{ id, name, role, company, image, isVerified }`
+    - `name` via `getMentorDisplayName`
+    - `role` via `getMentorHeadline`
+    - `company` via `getMentorCompaniesLine`
+- Render:
+  - Pass mapped blogs to `BlogsSection blogs={blogs}`
+  - Pass mapped mentors to `FacultySection mentors={mentors}`
+
+Blogs list: `/blogs`
+~~~~~~~~~~~~~~~~~~~~
+File: `src/app/blogs/page.tsx`
+Type: Server component (`async function BlogsPage()`).
+
+Data flow:
+- `const blogs = await getAllBlogs();`
+- `mostRecent = blogs.slice(0, 3);`
+- `mostLiked = [...blogs].sort((a, b) => b.likes - a.likes).slice(0, 3);`
+
+Rendering:
+- Main column:
+  - Loops `blogs` and builds cards with:
+    - Author, date, likes (using helpers)
+    - Hero image from `bannerImageLink` (Next `Image`)
+    - Text snippet via `getPlainTextExcerpt`
+    - Link to `/blogs/[id]`
+- Right sidebar:
+  - "Most Recent" list linked to `/blogs/[id]`
+  - "Most Loved" list based on `likes`
+  - Static topic chips for discoverability
+
+Blog detail: `/blogs/[id]`
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+File: `src/app/blogs/[id]/page.tsx`
+
+Routing:
+- `generateStaticParams`:
+  - `const blogs = await getAllBlogs();`
+  - Returns `{ id: blog.id.toString() }` for static generation
+
+Metadata:
+- `generateMetadata`:
+  - Reads `params.id`, loads blog via `await getBlogById(id)`
+  - If found, sets:
+    - `title: "<Blog Title> | MADAlgos"`
+    - `description` including author + publish date
+
+Page render:
+- Validates numeric id, uses `await getBlogById(id)`
+- 404 via `notFound()` if no blog found
+- Renders:
+  - Heading (title, author, date, likes)
+  - Optional hero `Image` using `bannerImageLink`
+  - Full content:
+    - `<div dangerouslySetInnerHTML={{ __html: blog.descriptionDetails }} />`
+    - Wrapped in Tailwind `prose prose-invert` for readable typography
+
+Mentors list: `/mentors`
+~~~~~~~~~~~~~~~~~~~~~~~~
+File: `src/app/mentors/page.tsx`
+
+Data flow:
+- `const mentors = await getAllMentors();`
+- Map raw mentors into `MentorCardProps` objects:
+  - Uses helper functions for name, headline, companies, ratings, and joined date.
+
+Rendering:
+- Uses `MentorsGrid` client component:
+  - Shows first 10 mentors by default.
+  - Renders each with `MentorCard`.
+  - If more than 10, shows a **"Show All Mentors"** button that loads the rest on click (client-side state, no extra network call).
+
+MentorCard (individual card)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+File: `src/components/mentors/MentorCard.tsx`
+Type: Client component.
+
+Key behaviours:
+- Shows:
+  - Name, verification badge, headline, companies, location, rating, joined date.
+  - Short description with `Read more / Show less` toggle (client-side state).
+  - Up to six skill tags.
+  - Socials:
+    - LinkedIn button when `linkedin` URL is present.
+- "What can I expect?" section:
+  - Collapsible border box controlled by local `open` state.
+  - Displays a fixed list of expectation points when expanded.
+
+Mentors grid:
+~~~~~~~~~~~~~
+File: `src/components/mentors/MentorsGrid.tsx`
+
+Behaviour:
+- Accepts an array of `MentorCardProps`.
+- Client-side state `showAll`:
+  - `false`: only first 10 mentors are rendered.
+  - `true`: all mentors are rendered.
+- Provides a CTA button "Show All Mentors" beneath the grid (visible only when there are more than 10 mentors and `showAll` is false).
+
+Home mentors carousel:
+----------------------
+File: `src/components/sections/faculty.tsx`
+
+Data:
+- Receives an array of simplified home mentor cards from the home page.
+
+Behaviour:
+- Horizontal marquee of mentor preview cards.
+- Each card:
+  - Displays name, verification badge, role, and companies.
+  - Links to `/mentors` (not per-mentor pages).
+
+Blogs carousel on home:
+-----------------------
+File: `src/components/sections/blogs-section.tsx`
+
+Data:
+- Receives an array of simplified home blog cards from the home page.
+
+Behaviour:
+- Horizontal marquee of blog cards.
+- Each card links to `/blogs/[id]` using the `id` from the database.
+
+How to onboard a new API or page
+--------------------------------
+1. Add or extend a Mongoose model in `src/models/`.
+2. Add typed helpers in `src/lib/` (keep them async and reusable).
+3. Create API routes in `src/app/api/.../route.ts` that:
+   - Validate input.
+   - Call `connectDB()` once.
+   - Use the helpers or models.
+   - Return structured JSON with clear `message`/`error` fields.
+4. In pages, call helpers from server components (async) whenever possible.
+5. For heavy client-only UI (filters, carousels, toggles), wrap them as `"use client"` components and pass only the data needed.
+
+This structure keeps database and API logic centralized while page components remain mainly responsible for layout and presentation. New developers should start by reading:
+- `src/lib/mongodb.ts` (connection)
+- `src/lib/blogs.ts` and `src/lib/mentors.ts` (queries)
+- `src/app/api/contact/route.ts` and `src/app/api/admin/seed-content/route.ts` (API patterns)
+

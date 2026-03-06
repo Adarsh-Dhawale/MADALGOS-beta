@@ -23,7 +23,7 @@ const hubs = [
     stats: "1.8k+ Talent Grid"
   },
   {
-    image: "https://images.unsplash.com/photo-1449156006079-47c0a27ee9f1?q=80&w=800&h=500&auto=format&fit=crop",
+    image: "https://images.unsplash.com/photo-1526045612212-70caf35c14df?q=80&w=800&h=500&auto=format&fit=crop",
     collaboration: "LONDON TECH CORE",
     location: "London, UK",
     tag: "GLOBAL STRATEGY",
