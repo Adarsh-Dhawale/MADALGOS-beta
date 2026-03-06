@@ -49,13 +49,13 @@ const Hero = () => {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.8 }}
-                  className="inline-flex items-center gap-4 px-4 py-2 md:px-6 md:py-2.5 rounded-full bg-white/5 border border-white/10 backdrop-blur-2xl text-primary text-[9px] md:text-[11px] font-black tracking-[0.4em] uppercase mb-8 md:mb-12 shadow-2xl ring-1 ring-white/5"
+                  className="inline-flex items-center gap-4 px-4 py-2 md:px-6 md:py-2.5 rounded-full bg-white/5 border border-white/10 backdrop-blur-2xl text-primary text-[9px] md:text-[11px] font-black tracking-[0.4em] uppercase mb-8 md:mb-10 shadow-2xl ring-1 ring-white/5"
                 >
                   <div className="relative flex h-2 w-2">
                     <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
                     <span className="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
                   </div>
-                  <span>Protocol: Enterprise AI Transformation</span>
+                  <span>INDUSTRY-ALIGNED TECH EDUCATION PLATFORM</span>
                 </motion.div>
 
                 {/* Headline - Large but Elegant (Plus Jakarta Sans vibe) */}
@@ -63,11 +63,11 @@ const Hero = () => {
                   initial={{ opacity: 0, y: 30 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 1, delay: 0.2 }}
-                  className="text-balance text-5xl sm:text-7xl md:text-8xl lg:text-[7.5rem] font-extrabold leading-[0.85] tracking-tighter text-white"
+                  className="text-balance text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-extrabold leading-[0.9] tracking-tighter text-white"
                 >
-                  Intelligent <br />
-                  <span className="text-gradient-brand">Enterprise</span> <br />
-                  <span className="text-gradient-premium">Intelligence</span>
+                  India&apos;s Industry-Integrated <br />
+                  <span className="text-gradient-brand">Computer</span> <br />
+                  <span className="text-gradient-premium">Science Program</span>
                 </motion.h1>
 
                 {/* Sub-headline - Premium weight and spacing */}
@@ -75,9 +75,10 @@ const Hero = () => {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.8, delay: 0.4 }}
-                  className="mt-8 md:mt-12 max-w-2xl text-balance text-lg md:text-2xl text-muted-foreground font-medium leading-[1.6] tracking-tight opacity-70"
+                  className="mt-6 md:mt-8 max-w-2xl text-balance text-base md:text-xl text-muted-foreground font-medium leading-[1.7] tracking-tight opacity-80"
                 >
-                  MAD Algos architects proprietary talent grids and AI infrastructure for global industry leaders at the intersection of deep-tech and scale.
+                  A scalable academic transformation model built to enhance institutional reputation,
+                  student capability, and long-term industry success.
                 </motion.p>
 
                 {/* Action Buttons - upGrad inspired primary + secondary */}
@@ -85,21 +86,21 @@ const Hero = () => {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.8, delay: 0.6 }}
-                  className="mt-12 md:mt-16 flex flex-wrap items-center gap-4 md:gap-6"
+                  className="mt-10 md:mt-14 flex flex-wrap items-center gap-4 md:gap-6"
                 >
                   <button
-                    className="group relative inline-flex items-center justify-center h-16 md:h-20 px-10 md:px-14 text-[10px] md:text-xs font-black tracking-[0.3em] uppercase text-primary-foreground transition-all active:scale-95 w-full sm:w-auto overflow-hidden rounded-full shadow-[0_20px_60px_rgba(45,212,191,0.25)] bg-primary"
+                    className="group relative inline-flex items-center justify-center h-14 md:h-16 px-10 md:px-12 text-[10px] md:text-xs font-black tracking-[0.3em] uppercase text-primary-foreground transition-all active:scale-95 w-full sm:w-auto overflow-hidden rounded-full shadow-[0_16px_40px_rgba(4,34,102,0.35)] bg-primary"
                   >
                     <span className="relative z-10 flex items-center gap-3">
-                      Start Transformation
+                      Apply Now
                       <ArrowRight className="h-4 w-4 md:h-5 md:w-5 transition-transform duration-300 group-hover:translate-x-2" />
                     </span>
                     <div className="absolute inset-0 bg-white opacity-0 group-hover:opacity-10 transition-opacity" />
                   </button>
                   
-                  <button className="group relative inline-flex items-center justify-center h-16 md:h-20 px-10 md:px-14 text-[10px] md:text-xs font-black tracking-[0.3em] uppercase text-white transition-all active:scale-95 w-full sm:w-auto rounded-full border border-white/10 bg-white/5 backdrop-blur-3xl hover:bg-white/10 hover:border-white/20 ring-1 ring-white/5">
+                  <button className="group relative inline-flex items-center justify-center h-14 md:h-16 px-10 md:px-12 text-[10px] md:text-xs font-black tracking-[0.3em] uppercase text-white transition-all active:scale-95 w-full sm:w-auto rounded-full border border-white/10 bg-white/5 backdrop-blur-3xl hover:bg-white/10 hover:border-white/20 ring-1 ring-white/5">
                     <Play className="mr-3 h-3 w-3 md:h-4 md:w-4 fill-primary text-primary" />
-                    View Ecosystem
+                    Download Brochure
                   </button>
                 </motion.div>
               </div>
@@ -127,24 +128,7 @@ const Hero = () => {
         </div>
       </div>
 
-      {/* Red Marquee Bar - Exact upGrad Replication */}
-      <div className="w-full bg-[#E50019] relative z-20 py-3.5 border-t border-b border-white/10">
-        <div className="overflow-hidden whitespace-nowrap">
-          <div className="flex animate-marquee gap-x-24">
-            {[...Array(4)].map((_, j) => (
-              <div key={j} className="flex items-center gap-x-24">
-                {['Enterprise AI Protocol is now live • Scale Now!', 'Global Innovation Hub: San Francisco opening • Discover!', 'MAD Algos Q3 Talent Grid active • Enrol!', 'New Partnership: Silicon Valley Enterprise • Explore!'].map((news, i) => (
-                  <span key={i} className="text-[11px] font-black tracking-[0.2em] uppercase text-white flex items-center gap-3">
-                    <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
-                    {news}
-                    <ArrowRight className="w-3.5 h-3.5" />
-                  </span>
-                ))}
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
+      {/* Hero bottom spacing without ticker */}
     </section>
   );
 };

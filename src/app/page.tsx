@@ -11,10 +11,10 @@ import LearningBeyondClassroom from "@/components/sections/learning-beyond";
 import AlumniSection from "@/components/sections/alumni";
 import FacultySection from "@/components/sections/faculty";
 import DifferentiationSection from "@/components/sections/differentiation";
-import GlobalStats from "@/components/sections/global-stats";
-import Awards from "@/components/sections/awards";
+import BlogsSection from "@/components/sections/blogs-section";
 import Testimonials from "@/components/sections/testimonials";
 import FAQ from "@/components/sections/faq";
+import ContactSection from "@/components/sections/contact";
 import Footer from "@/components/sections/footer";
 
 export default function Home() {
@@ -42,8 +42,7 @@ export default function Home() {
             <AlumniSection />
             <FacultySection />
             <DifferentiationSection />
-            <GlobalStats />
-            <Awards />
+            <BlogsSection />
             <Testimonials />
             <FAQ />
           </div>

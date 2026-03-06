@@ -1,6 +1,7 @@
 "use client";
 
 import React from 'react';
+import Image from 'next/image';
 import { Linkedin, Twitter, Facebook, Instagram, Youtube, Phone, Mail, ShieldCheck, Globe, Zap, Cpu } from 'lucide-react';
 import { motion } from 'framer-motion';
 
@@ -34,17 +35,14 @@ const Footer = () => {
           {/* Brand Column */}
           <div className="lg:col-span-4">
             <div className="flex items-center gap-4 mb-10 group cursor-default">
-              <div className="relative flex items-center gap-2 transition-all duration-500 group-hover:scale-110">
-                <div className="w-5 h-5 rounded-full border-2 border-primary shadow-[0_0_15px_rgba(45,212,191,0.5)]" />
-                <div className="w-0 h-0 border-l-[10px] border-l-secondary border-y-[6px] border-y-transparent" />
-                <div className="w-4 h-4 rounded-sm bg-primary/80 animate-pulse" />
-              </div>
-              <div className="flex flex-col leading-none">
-                <span className="text-2xl md:text-3xl font-bold tracking-tighter text-white uppercase">
-                  MAD <span className="text-primary">ALGOS</span>
-                </span>
-                <span className="text-[7px] tracking-[0.5em] font-bold text-muted-foreground uppercase mt-1 opacity-40">Enterprise Elite</span>
-              </div>
+              <Image
+                src="/navbar_logo2_trans.png"
+                alt="MAD Algos logo"
+                width={180}
+                height={40}
+                className="h-10 w-auto object-contain"
+                priority
+              />
             </div>
             <p className="text-muted-foreground text-lg leading-relaxed max-w-sm opacity-60">
               Architecting the future of B2B talent ecosystems through high-fidelity AI infrastructure and elite Silicon Valley mentorship.

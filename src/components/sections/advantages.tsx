@@ -28,19 +28,19 @@ const AdvantageCard = ({
 
 const Advantages = () => {
   const leftItems = [
-    { icon: <Building2 className="w-8 h-8" />, title: 'State-of-the-Art Hubs' },
-    { icon: <GraduationCap className="w-8 h-8" />, title: 'Enterprise Certified Degree' },
-    { icon: <Users2 className="w-8 h-8" />, title: 'Elite Talent Network' },
-    { icon: <Briefcase className="w-8 h-8" />, title: 'Executive Placement Track' },
-    { icon: <Globe2 className="w-8 h-8" />, title: 'Global Transformation Access' },
+    { icon: <Building2 className="w-8 h-8" />, title: 'State-of-the-Art Campus' },
+    { icon: <GraduationCap className="w-8 h-8" />, title: 'UGC Approved B.Tech Degree' },
+    { icon: <Users2 className="w-8 h-8" />, title: 'Vibrant University Life' },
+    { icon: <Briefcase className="w-8 h-8" />, title: 'Interdisciplinary Curriculum' },
+    { icon: <Globe2 className="w-8 h-8" />, title: 'Fully Residential Campus' },
   ];
 
   const rightItems = [
-    { icon: <Cpu className="w-8 h-8" />, title: 'Sessions by MAANG Mentors' },
-    { icon: <Code2 className="w-8 h-8" />, title: 'Protocol-First Engineering' },
-    { icon: <Zap className="w-8 h-8" />, title: 'Enterprise AI Infrastructure' },
-    { icon: <Target className="w-8 h-8" />, title: 'Strategic CXO Masterclasses' },
-    { icon: <Rocket className="w-8 h-8" />, title: 'Tech Leadership Architecture' },
+    { icon: <Cpu className="w-8 h-8" />, title: 'Sessions by MAANG Engineers' },
+    { icon: <Code2 className="w-8 h-8" />, title: 'Coding from Day 1' },
+    { icon: <Zap className="w-8 h-8" />, title: 'AI-First Campus' },
+    { icon: <Target className="w-8 h-8" />, title: 'CXO Masterclasses' },
+    { icon: <Rocket className="w-8 h-8" />, title: 'Tech with Management' },
   ];
 
   return (
@@ -50,22 +50,22 @@ const Advantages = () => {
 
       <div className="relative z-10 container mx-auto pt-24">
         {/* Section Heading */}
-          <div className="text-center mb-16 md:mb-24 max-w-5xl mx-auto">
+          <div className="text-center mb-14 md:mb-20 max-w-5xl mx-auto">
             <motion.h2 
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className="text-4xl sm:text-6xl md:text-8xl font-black mb-6 md:mb-10 text-white leading-none tracking-tighter uppercase"
+              className="text-4xl sm:text-6xl md:text-7xl font-black mb-4 md:mb-6 text-white leading-tight tracking-tighter uppercase"
             >
-              Best of <span className="text-gradient-brand">Both Worlds</span>
+              Best of Both <span className="text-gradient-brand">World</span>
             </motion.h2>
             <motion.p 
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className="text-muted-foreground text-lg md:text-2xl max-w-3xl mx-auto font-medium tracking-tight leading-relaxed opacity-60 px-4"
+              className="text-muted-foreground text-base md:text-xl max-w-3xl mx-auto font-medium tracking-tight leading-relaxed opacity-70 px-4"
             >
-              Where Global Enterprise Stability Meets Silicon Valley Disruptive Protocol.
+              Where World-Class University Meets Silicon Valley-Style Tech Learning.
             </motion.p>
           </div>
 
@@ -74,7 +74,9 @@ const Advantages = () => {
             
             {/* Left Column: University Advantage / Enterprise Stability */}
             <div className="lg:col-span-3 space-y-4 md:space-y-6 order-2 lg:order-1">
-              <h3 className="text-xl md:text-2xl font-black tracking-tight text-white mb-6 md:mb-10 uppercase opacity-60 text-center lg:text-left">Enterprise Stability</h3>
+              <h3 className="text-lg md:text-xl font-black tracking-tight text-white mb-4 md:mb-6 uppercase opacity-60 text-center lg:text-left">
+                University Advantage
+              </h3>
               {leftItems.map((item, idx) => (
                 <motion.div
                   key={idx}
@@ -148,8 +150,10 @@ const Advantages = () => {
           </div>
 
           {/* Right Column: Silicon Valley Style Learning / Disruptive Protocol */}
-          <div className="lg:col-span-3 space-y-6 order-3">
-            <h3 className="text-2xl font-black tracking-tight text-white mb-10 uppercase opacity-60">Silicon Valley Protocol</h3>
+            <div className="lg:col-span-3 space-y-4 md:space-y-6 order-3">
+            <h3 className="text-lg md:text-xl font-black tracking-tight text-white mb-4 md:mb-6 uppercase opacity-60">
+              Silicon Valley Style Learning
+            </h3>
             {rightItems.map((item, idx) => (
               <motion.div
                 key={idx}

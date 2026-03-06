@@ -2,10 +2,11 @@
 
 import React from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import { UserCheck, Star, ArrowRight, Briefcase, Verified } from 'lucide-react';
 import { motion } from 'framer-motion';
 
-interface MentorData {
+export interface MentorData {
   name: string;
   role: string;
   company: string;
@@ -15,7 +16,7 @@ interface MentorData {
   image: string;
 }
 
-const mentors: MentorData[] = [
+export const mentors: MentorData[] = [
   {
     name: "Shailendra Acharya",
     role: "Senior Software Engineer",
@@ -54,26 +55,12 @@ const mentors: MentorData[] = [
   }
 ];
 
-const MentorCard = ({ mentor, index }: { mentor: MentorData, index: number }) => {
+const MentorCard = ({ mentor }: { mentor: MentorData }) => {
   return (
-    <motion.div 
-      initial={{ opacity: 0, y: 30 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      transition={{ delay: index * 0.1 }}
-      viewport={{ once: true }}
-      className="group relative bg-slate-950/20 backdrop-blur-3xl rounded-[3rem] p-10 border border-white/5 flex flex-col h-full transition-all duration-700 hover:scale-[1.02] hover:border-primary/30 hover:bg-slate-900/40 shadow-2xl"
-    >
-      {/* Verified Badge */}
-      <div className="absolute top-8 right-10">
-         <div className="flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/10 border border-primary/20 text-primary text-[10px] font-bold uppercase tracking-widest shadow-lg">
-            <Verified className="w-3.5 h-3.5 fill-primary/20" />
-            <span>Elite Mentor</span>
-         </div>
-      </div>
-
+    <div className="group relative bg-slate-950/40 backdrop-blur-3xl rounded-[2.5rem] px-8 py-6 border border-white/5 flex items-center gap-6 min-w-[260px] md:min-w-[320px] h-[140px] transition-all duration-500 hover:border-primary/40 hover:bg-slate-900/50 shadow-2xl">
       {/* Profile Header */}
-      <div className="flex items-center gap-8 mb-10">
-        <div className="relative w-28 h-28 rounded-[2rem] border border-white/10 overflow-hidden group-hover:border-primary/40 transition-all duration-700 shadow-2xl">
+      <div className="flex items-center gap-5">
+        <div className="relative w-16 h-16 md:w-20 md:h-20 rounded-2xl border border-white/10 overflow-hidden group-hover:border-primary/40 transition-all duration-700 shadow-2xl">
           <Image
             src={mentor.image}
             alt={mentor.name}
@@ -81,48 +68,20 @@ const MentorCard = ({ mentor, index }: { mentor: MentorData, index: number }) =>
             className="object-cover scale-105 group-hover:scale-110 transition-transform duration-700 grayscale group-hover:grayscale-0"
           />
         </div>
-        <div className="flex-1">
-          <h3 className="text-3xl font-bold text-white group-hover:text-primary transition-colors tracking-tight uppercase">
+        <div className="flex-1 overflow-hidden">
+          <h3 className="text-base md:text-lg font-bold text-white group-hover:text-primary transition-colors tracking-tight uppercase truncate">
             {mentor.name}
           </h3>
-          <div className="flex items-center gap-2 text-muted-foreground mt-2 font-bold text-[11px] uppercase tracking-[0.1em] opacity-60">
+          <div className="flex items-center gap-2 text-muted-foreground mt-1 font-bold text-[10px] md:text-[11px] uppercase tracking-[0.1em] opacity-60 truncate">
              <Briefcase className="w-4 h-4 text-primary" />
              {mentor.role}
           </div>
-          <p className="text-secondary/80 text-[10px] font-bold mt-2 uppercase tracking-[0.2em]">{mentor.company}</p>
-        </div>
-      </div>
-
-      {/* Bio */}
-      <p className="text-muted-foreground text-sm leading-relaxed mb-10 line-clamp-3 font-medium opacity-60 group-hover:opacity-100 transition-opacity">
-        {mentor.bio}
-      </p>
-
-      {/* Specialized Tags */}
-      <div className="flex flex-wrap gap-2.5 mb-12">
-        {mentor.tags.map((tag) => (
-          <span
-            key={tag}
-            className="px-5 py-2.5 rounded-2xl border border-white/5 text-[10px] font-bold text-white/50 bg-white/5 hover:border-primary/30 hover:text-primary transition-all duration-300 cursor-default uppercase tracking-widest"
-          >
-            {tag}
-          </span>
-        ))}
-      </div>
-
-      {/* Action Footer */}
-      <div className="mt-auto pt-10 border-t border-white/5 flex items-center justify-between">
-        <div>
-          <p className="text-white/20 text-[10px] font-bold uppercase tracking-[0.4em] mb-2">ACCESS LEVEL</p>
-          <p className="text-white font-bold text-xl tracking-tight uppercase">
-            {mentor.price}
+          <p className="text-secondary/80 text-[9px] md:text-[10px] font-bold mt-1 uppercase tracking-[0.2em] truncate">
+            {mentor.company}
           </p>
         </div>
-        <button className="h-16 px-10 rounded-2xl bg-white text-slate-950 font-bold text-[10px] uppercase tracking-[0.3em] hover:bg-primary transition-all duration-300 transform active:scale-95 shadow-2xl flex items-center gap-3">
-          SECURE SLOT <ArrowRight className="w-4 h-4" />
-        </button>
       </div>
-    </motion.div>
+    </div>
   );
 };
 
@@ -134,53 +93,58 @@ const FacultySection = () => {
 
       <div className="container mx-auto relative z-10">
         {/* Section Header */}
-        <div className="text-center mb-32 max-w-4xl mx-auto">
-          <motion.div 
+        <div className="text-center mb-20 md:mb-24 max-w-full mx-auto">
+          <div className="flex flex-col items-center gap-4">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="inline-flex items-center gap-3 px-5 py-2 rounded-full bg-white/5 border border-white/10 text-primary text-[10px] font-bold uppercase tracking-[0.3em] shadow-2xl"
+            >
+              <UserCheck className="w-4 h-4" />
+              <span>Our Mentors</span>
+            </motion.div>
+            <motion.h2
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="text-3xl md:text-5xl lg:text-6xl font-bold text-white tracking-tighter whitespace-nowrap inline-block mx-auto"
+            >
+              Taught by World&apos;s Top Tech and Academic Minds
+            </motion.h2>
+          </div>
+          <motion.p
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="inline-flex items-center gap-3 px-5 py-2 rounded-full bg-white/5 border border-white/10 text-primary text-[10px] font-bold uppercase tracking-[0.3em] mb-10 shadow-2xl"
+            className="mt-6 text-muted-foreground text-base md:text-xl font-medium max-w-2xl mx-auto tracking-tight opacity-70 leading-relaxed"
           >
-             <UserCheck className="w-4 h-4" />
-             <span>Enterprise Advisory</span>
-          </motion.div>
-          <motion.h2 
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-6xl md:text-8xl font-bold text-white mb-8 tracking-tighter"
-          >
-            The <span className="text-gradient-brand">MAANG</span> Network
-          </motion.h2>
-          <motion.p 
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-muted-foreground text-xl md:text-2xl font-medium max-w-2xl mx-auto tracking-tight opacity-60 leading-relaxed"
-          >
-            Direct access to the industry's most influential engineering minds and enterprise architects.
+            Industry experts and innovators who turn real-world experience into transformative learning.
           </motion.p>
         </div>
+        {/* Horizontal marquee of mentors */}
+        <div className="relative max-w-6xl mx-auto">
+          {/* Edge fades */}
+          <div className="pointer-events-none absolute inset-y-0 left-0 w-24 bg-gradient-to-r from-background via-background/70 to-transparent z-20" />
+          <div className="pointer-events-none absolute inset-y-0 right-0 w-24 bg-gradient-to-l from-background via-background/70 to-transparent z-20" />
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 max-w-6xl mx-auto">
-          {mentors.map((mentor, index) => (
-            <MentorCard key={index} mentor={mentor} index={index} />
-          ))}
+          <div className="overflow-hidden py-4">
+            <div className="flex gap-6 animate-[marquee_45s_linear_infinite]">
+              {[...mentors, ...mentors].map((mentor, idx) => (
+                <MentorCard key={`${mentor.name}-${idx}`} mentor={mentor} />
+              ))}
+            </div>
+          </div>
 
-          {/* Premium Expansion Card */}
-          <motion.div 
-            initial={{ opacity: 0, scale: 0.95 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true }}
-            className="bg-primary/5 rounded-[3.5rem] p-16 border border-primary/20 flex flex-col items-center justify-center text-center group border-dashed hover:bg-primary/10 transition-all duration-700 shadow-[0_40px_80px_rgba(45,212,191,0.05)]"
-          >
-             <h3 className="text-4xl md:text-5xl font-bold text-white mb-10 tracking-tighter leading-[0.9] uppercase">
-               Access Our Global <br /> <span className="text-primary italic">Advisory Core</span>
-             </h3>
-             <button className="h-18 px-14 rounded-2xl bg-primary text-slate-950 font-bold text-[10px] uppercase tracking-[0.4em] hover:scale-105 transition-all shadow-[0_25px_50px_rgba(45,212,191,0.3)] flex items-center gap-4">
-               EXPLORE ALL MENTORS <ArrowRight className="w-5 h-5" />
-             </button>
-          </motion.div>
+          <div className="mt-10 flex justify-center">
+            <Link
+              href="/mentors"
+              className="inline-flex items-center gap-3 px-10 py-4 rounded-full border border-white/10 bg-white/5 text-[11px] font-bold tracking-[0.3em] uppercase text-white hover:bg-primary hover:text-slate-950 hover:border-primary transition-all duration-300 shadow-2xl"
+            >
+              View All Mentors
+              <ArrowRight className="w-4 h-4" />
+            </Link>
+          </div>
         </div>
       </div>
     </section>

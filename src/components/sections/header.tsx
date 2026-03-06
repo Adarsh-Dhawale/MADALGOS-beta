@@ -1,8 +1,9 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { ChevronDown, Menu, X, Calendar, Box, BookOpen, Info, Mail, Briefcase, Search, Bell, Sparkles, Globe, BarChart3, ShieldCheck } from "lucide-react";
+import { ChevronDown, Menu, X, Calendar, Box, BookOpen, Info, Mail, Briefcase, Search, Bell, Sparkles, Globe, BarChart3, ShieldCheck, Sun, Moon } from "lucide-react";
 import { cn } from "@/lib/utils";
+import Image from "next/image";
 
 const NAV_ITEMS = [
   { 
@@ -31,14 +32,15 @@ const NAV_ITEMS = [
       { name: "B2B Benchmarks", href: "#", description: "Performance data", icon: <BarChart3 className="w-4 h-4" /> },
     ]
   },
-  { name: "GLOBAL NETWORK", href: "#" },
-  { name: "SOLUTIONS", href: "#" },
+  { name: "BLOGS", href: "/blogs", icon: <BookOpen className="w-3.5 h-3.5" /> },
+  { name: "CONTACT US", href: "/contact", icon: <Mail className="w-3.5 h-3.5" /> },
 ];
 
 const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
+  const [theme, setTheme] = useState<"light" | "dark">("light");
 
   useEffect(() => {
     const handleScroll = () => {
@@ -48,9 +50,30 @@ const Header = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const stored = window.localStorage.getItem("madalgos-theme") as "light" | "dark" | null;
+    const initial = stored ?? "light";
+    setTheme(initial);
+    document.body.classList.remove("light", "dark");
+    document.body.classList.add(initial);
+  }, []);
+
+  const toggleTheme = () => {
+    const next: "light" | "dark" = theme === "light" ? "dark" : "light";
+    setTheme(next);
+    if (typeof document !== "undefined") {
+      document.body.classList.remove("light", "dark");
+      document.body.classList.add(next);
+    }
+    if (typeof window !== "undefined") {
+      window.localStorage.setItem("madalgos-theme", next);
+    }
+  };
+
   return (
     <header className={cn(
-      "fixed top-0 left-0 right-0 z-[100] transition-all duration-700 ease-[cubic-bezier(0.23,1,0.32,1)] px-4 py-4 md:px-8",
+      "fixed top-0 left-0 right-0 z-[100] transition-all duration-700 ease-[cubic-bezier(0.23,1,0.32,1)] px-4 py-3 md:px-8",
       isScrolled ? "translate-y-0" : "translate-y-2"
     )}>
       <nav
@@ -61,31 +84,24 @@ const Header = () => {
             : "bg-white/[0.03] backdrop-blur-xl border-white/5 py-5"
         )}
       >
-        <div className="px-8 md:px-12 flex items-center justify-between">
+        <div className="px-6 md:px-10 flex items-center justify-between gap-4">
           {/* Logo Section */}
-          <div className="flex items-center gap-16">
-            <a href="/" className="flex items-center gap-5 group transition-all active:scale-95" aria-label="home">
-              <div className="relative flex items-center justify-center">
-                 <div className="absolute inset-[-12px] bg-primary/20 blur-2xl rounded-full group-hover:bg-primary/40 transition-all duration-700 opacity-0 group-hover:opacity-100" />
-                 <div className="relative flex items-center gap-2.5 p-1 transition-all duration-500 group-hover:scale-110">
-                    <div className="w-6 h-6 rounded-full border-2 border-primary shadow-[0_0_20px_rgba(20,184,166,0.6)] flex items-center justify-center">
-                       <div className="w-2 h-2 rounded-full bg-primary animate-pulse" />
-                    </div>
-                    <div className="w-0 h-0 border-l-[12px] border-l-secondary border-y-[7px] border-y-transparent drop-shadow-[0_0_10px_rgba(99,102,241,0.5)]" />
-                    <div className="w-5 h-5 rounded-sm bg-primary/80 animate-pulse border border-white/20" />
-                 </div>
-              </div>
-              <div className="flex flex-col leading-none">
-                <span className="text-2xl md:text-3xl font-black tracking-tighter text-white">
-                  MAD <span className="text-gradient-brand">ALGOS</span>
-                </span>
-                <span className="text-[8px] tracking-[0.6em] font-black text-muted-foreground uppercase mt-1 opacity-60">Enterprise Elite</span>
+          <div className="flex items-center gap-8 md:gap-12">
+            <a href="/" className="flex items-center gap-4 group transition-all active:scale-95" aria-label="home">
+              <div className="relative w-32 h-10 md:w-40 md:h-12">
+                <Image
+                  src="/navbar_logo2_trans.png"
+                  alt="MAD ALGOS"
+                  fill
+                  className="object-contain"
+                  priority
+                />
               </div>
             </a>
 
             {/* Desktop Navigation */}
             <div className="hidden xl:flex items-center gap-12">
-              <ul className="flex items-center gap-10 text-[11px] font-black tracking-[0.25em] text-muted-foreground/80">
+            <ul className="flex items-center gap-10 text-[11px] md:text-[12px] font-black tracking-[0.24em] text-muted-foreground/80 whitespace-nowrap">
                 {NAV_ITEMS.map((item) => (
                   <li 
                     key={item.name} 
@@ -95,9 +111,16 @@ const Header = () => {
                   >
                     <a
                       href={item.href}
-                      className="flex items-center gap-2.5 hover:text-white transition-all duration-300 group-hover/item:text-primary"
+                      className="flex items-center gap-3 hover:text-white transition-all duration-300 group-hover/item:text-primary"
                     >
-                      <span>{item.name}</span>
+                      {item.icon && (
+                        <span className="inline-flex h-7 w-7 items-center justify-center rounded-full bg-white/5 border border-white/10 text-muted-foreground group-hover/item:text-primary group-hover/item:border-primary/40">
+                          {item.icon}
+                        </span>
+                      )}
+                      <span className="py-1.5 px-0.5">
+                        {item.name}
+                      </span>
                       {item.dropdown && (
                         <ChevronDown className={cn(
                           "w-3.5 h-3.5 transition-transform duration-500 ease-out",
@@ -147,26 +170,40 @@ const Header = () => {
           </div>
 
           {/* Action Buttons */}
-          <div className="flex items-center gap-5">
-            <div className="hidden lg:flex items-center gap-2 mr-3">
-              <button className="p-3 text-muted-foreground hover:text-white transition-all hover:bg-white/5 rounded-full border border-transparent hover:border-white/10">
-                <Search className="w-4.5 h-4.5" />
-              </button>
-              <button className="p-3 text-muted-foreground hover:text-white transition-all hover:bg-white/5 rounded-full relative border border-transparent hover:border-white/10">
-                <Bell className="w-4.5 h-4.5" />
-                <span className="absolute top-3 right-3 w-2 h-2 bg-primary rounded-full shadow-[0_0_15px_#14b8a6]" />
-              </button>
-            </div>
-            
+          <div className="flex items-center gap-3 md:gap-4">
             <a
               href="#"
               className="group relative inline-flex items-center justify-center whitespace-nowrap overflow-hidden rounded-full p-px transition-all active:scale-95 shadow-2xl shadow-primary/10"
             >
               <div className="absolute inset-0 bg-gradient-to-r from-primary via-secondary to-primary animate-pulse" />
-              <div className="relative inline-flex items-center justify-center whitespace-nowrap bg-slate-950 font-black h-12 px-10 rounded-full text-[11px] tracking-[0.3em] text-white group-hover:bg-transparent transition-all duration-300 uppercase">
-                Access Portal
+              <div className="relative inline-flex items-center justify-center whitespace-nowrap bg-primary-foreground/90 font-black h-12 px-8 rounded-full text-[11px] tracking-[0.3em] text-white group-hover:text-primary group-hover:bg-transparent transition-all duration-300 uppercase">
+                Join Us
               </div>
             </a>
+
+            <a
+              href="#"
+              className="hidden md:inline-flex group relative items-center justify-center whitespace-nowrap overflow-hidden rounded-full p-px transition-all active:scale-95 shadow-2xl shadow-primary/10"
+            >
+              <div className="absolute inset-0 bg-gradient-to-r from-primary via-secondary to-primary animate-pulse" />
+              <div className="relative inline-flex items-center justify-center whitespace-nowrap bg-primary-foreground/90 font-black h-12 px-8 rounded-full text-[11px] tracking-[0.3em] text-white group-hover:text-primary group-hover:bg-transparent transition-all duration-300 uppercase">
+                Log In
+              </div>
+            </a>
+
+            {/* Theme toggle - extreme right */}
+            <button
+              type="button"
+              onClick={toggleTheme}
+              className="hidden lg:inline-flex items-center justify-center w-10 h-10 rounded-full border border-white/20 bg-white/5 text-white hover:bg-white/10 hover:border-white/40 transition-all active:scale-95 ml-1"
+              aria-label="Toggle light/dark mode"
+            >
+              {theme === "light" ? (
+                <Moon className="w-4 h-4" />
+              ) : (
+                <Sun className="w-4 h-4" />
+              )}
+            </button>
 
             <button 
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}

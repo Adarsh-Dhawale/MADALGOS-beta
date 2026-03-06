@@ -1,91 +1,75 @@
 "use client";
 
-import React from 'react';
-import Image from 'next/image';
-import { motion } from 'framer-motion';
+import React from "react";
+import Image from "next/image";
+import { motion } from "framer-motion";
 
 const AlumniSection = () => {
-    const logos = [
-      {
-        name: "LinkedIn",
-        src: "https://images.unsplash.com/photo-1611944212129-29977ae1398c?q=80&w=256&h=128&auto=format&fit=crop",
-        alt: "LinkedIn logo",
-      },
-      {
-        name: "Walmart",
-        src: "https://images.unsplash.com/photo-1615840287214-7ff58936c4cf?q=80&w=256&h=128&auto=format&fit=crop",
-        alt: "Walmart logo",
-      },
-      {
-        name: "PayPal",
-        src: "https://images.unsplash.com/photo-1563013544-824ae1b704d3?q=80&w=256&h=128&auto=format&fit=crop",
-        alt: "PayPal logo",
-      },
-      {
-        name: "Oracle",
-        src: "https://images.unsplash.com/photo-1544197150-b99a580bb7a8?q=80&w=256&h=128&auto=format&fit=crop",
-        alt: "Oracle logo",
-      },
-      {
-        name: "Google",
-        src: "https://images.unsplash.com/photo-1573804633927-bfcbcd909acd?q=80&w=256&h=128&auto=format&fit=crop",
-        alt: "Google logo",
-      }
-    ];
-
-  // For the grid layout seen in the screenshots, we replicate the pattern
-  const gridLogos = [
-    ...logos, ...logos, ...logos, ...logos
-  ].slice(0, 18);
+  const logos = [
+    { name: "Microsoft", src: "https://img.logo.dev/microsoft.com?token=pk_J68nV3eLS8C3y2kWZfKEFw&retina=true" },
+    { name: "Amazon", src: "https://img.logo.dev/amazon.com?token=pk_J68nV3eLS8C3y2kWZfKEFw&retina=true" },
+    { name: "Samsung", src: "https://img.logo.dev/samsung.com?token=pk_J68nV3eLS8C3y2kWZfKEFw&retina=true" },
+    { name: "J.P. Morgan", src: "https://img.logo.dev/jpmorganchase.com?token=pk_J68nV3eLS8C3y2kWZfKEFw&retina=true" },
+    { name: "Walmart", src: "https://img.logo.dev/walmart.com?token=pk_J68nV3eLS8C3y2kWZfKEFw&retina=true" },
+    { name: "Capgemini", src: "https://img.logo.dev/capgemini.com?token=pk_J68nV3eLS8C3y2kWZfKEFw&retina=true" },
+    { name: "TCS", src: "https://img.logo.dev/tcs.com?token=pk_J68nV3eLS8C3y2kWZfKEFw&retina=true" },
+    { name: "Google", src: "https://img.logo.dev/google.com?token=pk_J68nV3eLS8C3y2kWZfKEFw&retina=true" },
+  ];
 
   return (
-    <section className="bg-background py-32 px-6 md:px-12 border-t border-white/5 relative overflow-hidden">
-      <div className="max-w-[1400px] mx-auto text-center relative z-10">
-        <motion.h2 
-          initial={{ opacity: 0, y: 20 }}
+    <section className="bg-background py-32 px-6 relative overflow-hidden">
+      <div className="max-w-7xl mx-auto text-center">
+
+        {/* Heading */}
+        <motion.h2
+          initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="text-5xl md:text-7xl font-bold mb-10 tracking-tighter uppercase leading-none"
+          className="text-4xl md:text-6xl font-bold tracking-tight"
         >
-          <span className="text-primary italic">Global</span> <span className="text-white">Enterprise Network</span>
+          <span className="text-primary">MAD Algos</span> Alumni work at
         </motion.h2>
-        <motion.p 
-          initial={{ opacity: 0, y: 20 }}
+
+        {/* Subtext */}
+        <motion.p
+          initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2 }}
           viewport={{ once: true }}
-          className="max-w-3xl mx-auto text-muted-foreground text-xl mb-24 leading-relaxed font-medium opacity-60 tracking-tight"
+          className="mt-6 text-muted-foreground max-w-3xl mx-auto text-lg opacity-70"
         >
-          Our graduates are architects of innovation at 3000+ global organizations, from elite Silicon Valley unicorns to Fortune 500 giants.
+          Our learners are placed across leading global tech companies,
+          high-growth startups, and unicorns worldwide.
         </motion.p>
 
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 border border-white/5 rounded-[3rem] overflow-hidden shadow-2xl">
-          {gridLogos.map((logo, idx) => (
-            <motion.div 
-              key={`${logo.name}-${idx}`}
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              transition={{ delay: idx * 0.05 }}
-              viewport={{ once: true }}
-              className="group relative flex items-center justify-center p-12 border border-white/5 transition-all duration-700 hover:bg-white/[0.03]"
-            >
-              <div className="relative w-full aspect-[3/1] transition-all duration-700 transform group-hover:scale-110">
+        {/* Logo Marquee */}
+        <div className="relative mt-24 overflow-hidden">
+
+          {/* Gradient Fades */}
+          <div className="absolute left-0 top-0 h-full w-32 bg-gradient-to-r from-background to-transparent z-10" />
+          <div className="absolute right-0 top-0 h-full w-32 bg-gradient-to-l from-background to-transparent z-10" />
+
+          <div className="flex gap-12 animate-[marquee_24s_linear_infinite] items-center">
+
+            {[...logos, ...logos].map((logo, index) => (
+              <div
+                key={index}
+                className="relative h-32 w-64 md:h-40 md:w-72 flex-shrink-0 overflow-hidden rounded-2xl bg-white"
+              >
                 <Image
                   src={logo.src}
-                  alt={logo.alt}
+                  alt={logo.name}
                   fill
-                  style={{ objectFit: 'contain' }}
-                  className="grayscale opacity-20 brightness-200 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-700"
+                  sizes="300px"
+                  style={{ objectFit: "cover" }}
+                  className="brightness-105 contrast-110"
                 />
               </div>
-              
-              {/* Subtle hover reveal effect overlay */}
-              <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none">
-                <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-primary/30 to-transparent"></div>
-                <div className="absolute bottom-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-primary/30 to-transparent"></div>
-              </div>
-            </motion.div>
-          ))}
+            ))}
+
+          </div>
         </div>
+
       </div>
     </section>
   );

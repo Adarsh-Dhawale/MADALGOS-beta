@@ -44,7 +44,15 @@ const programFeatures: ProgramFeature[] = [
       {
         title: 'Contributing to Global Projects',
         description: 'Master the art of collaboration by contributing to major open-source repositories. Learn Git workflows, documentation, and community standards used by developers worldwide.'
-      }
+      },
+      {
+        title: 'Shipping Production-Grade PRs',
+        description: 'Move beyond tutorial repos to shipping real fixes and features. Students learn how to read large codebases, break down issues, and get high‑quality pull requests merged in popular projects.'
+      },
+      {
+        title: 'Building a Public Developer Brand',
+        description: 'Use open source as your portfolio. Students learn how to write READMEs, document APIs, and showcase contributions to stand out for internships and global opportunities.'
+      },
     ]
   },
   {
@@ -55,6 +63,14 @@ const programFeatures: ProgramFeature[] = [
       {
         title: 'Silicon Valley Experience',
         description: 'Direct exposure to how big tech works. Workshops led by engineers from FAANG/MAANG companies and visits to innovation hubs.'
+      },
+      {
+        title: 'Product Sprints with Industry Mentors',
+        description: 'Work in cross‑functional squads with industry mentors to ship real features on tight timelines, mirroring the way modern product teams operate.'
+      },
+      {
+        title: 'Global Internship & Hiring Tracks',
+        description: 'Get access to curated internship pipelines, mock interviews, and hiring challenges designed with partner companies across India, Europe, and North America.'
       }
     ]
   }
@@ -85,10 +101,10 @@ export default function LearningBeyondClassroom() {
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className="text-6xl md:text-8xl font-bold leading-[0.9] tracking-tighter text-white uppercase"
+              className="text-4xl md:text-6xl lg:text-7xl font-bold leading-[0.9] tracking-tighter text-white"
             >
               Learning Beyond <br />
-              <span className="text-gradient-brand italic">The Classroom</span>
+              <span className="text-gradient-brand italic">Classroom</span>
             </motion.h2>
           </div>
           <motion.div 
