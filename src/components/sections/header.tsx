@@ -40,7 +40,7 @@ const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
-  const [theme, setTheme] = useState<"light" | "dark">("light");
+  const [theme, setTheme] = useState<"light" | "dark">("dark");
 
   useEffect(() => {
     const handleScroll = () => {
@@ -53,8 +53,10 @@ const Header = () => {
   useEffect(() => {
     if (typeof window === "undefined") return;
     const stored = window.localStorage.getItem("madalgos-theme") as "light" | "dark" | null;
-    const initial = stored ?? "light";
+    const initial = stored ?? "dark";
     setTheme(initial);
+    document.documentElement.classList.remove("light", "dark");
+    document.documentElement.classList.add(initial);
     document.body.classList.remove("light", "dark");
     document.body.classList.add(initial);
   }, []);
@@ -63,6 +65,8 @@ const Header = () => {
     const next: "light" | "dark" = theme === "light" ? "dark" : "light";
     setTheme(next);
     if (typeof document !== "undefined") {
+      document.documentElement.classList.remove("light", "dark");
+      document.documentElement.classList.add(next);
       document.body.classList.remove("light", "dark");
       document.body.classList.add(next);
     }

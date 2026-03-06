@@ -280,7 +280,7 @@ const Curriculum = () => {
                 "Get industry-ready from Day 1 with hands-on coding, hackathons, and global competitions. Learn to build disruptive tech valued by startups and MAANG firms, backed by strong internship and placement opportunities.",
               images: [
                 {
-                  src: "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?q=80&w=800&auto=format&fit=crop",
+                  src: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=800&auto=format&fit=crop",
                   alt: "Students collaborating",
                 },
                 {

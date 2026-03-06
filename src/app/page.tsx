@@ -14,7 +14,6 @@ import DifferentiationSection from "@/components/sections/differentiation";
 import BlogsSection from "@/components/sections/blogs-section";
 import Testimonials from "@/components/sections/testimonials";
 import FAQ from "@/components/sections/faq";
-import ContactSection from "@/components/sections/contact";
 import Footer from "@/components/sections/footer";
 
 export default function Home() {
