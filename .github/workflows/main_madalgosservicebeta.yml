@@ -6,15 +6,58 @@ on:
       - main
 
 jobs:
-  deploy:
+  build:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build Next.js
+        run: npm run build
+
+      - name: Prepare deployment folder
+        run: |
+          mkdir deploy
+
+          # Copy standalone output (contains server.js)
+          cp -r .next/standalone/. deploy/
+
+          # Copy static assets INTO the standalone's .next folder
+          cp -r .next/static deploy/.next/static
+
+          # Copy public assets
+          cp -r public deploy/public
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: nextjs-build
+          path: deploy
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+
+    steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: nextjs-build
+          path: deploy
 
       - name: Deploy to Azure
         uses: azure/webapps-deploy@v3
         with:
           app-name: MADAlgosServiceBeta
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_B2B95DFF0A5E4D85A9E235EF83667A27 }}
-          package: .
+          package: deploy
