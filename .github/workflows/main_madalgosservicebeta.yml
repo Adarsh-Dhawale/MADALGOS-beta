@@ -26,6 +26,7 @@ jobs:
         run: npm run build
         env:
           MONGODB_URI: ${{ secrets.MONGODB_URI }}
+          NEXT_PUBLIC_RECAPTCHA_SITE_KEY: ${{ secrets.NEXT_PUBLIC_RECAPTCHA_SITE_KEY }}
 
       - name: Prepare deployment folder
         run: |

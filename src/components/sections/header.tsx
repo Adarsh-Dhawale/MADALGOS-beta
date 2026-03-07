@@ -61,6 +61,21 @@ const Header = () => {
     document.body.classList.add(initial);
   }, []);
 
+  // When mobile menu is open: lock body scroll so only menu content scrolls
+  useEffect(() => {
+    if (mobileMenuOpen) {
+      document.body.style.overflow = "hidden";
+      document.body.style.touchAction = "none";
+    } else {
+      document.body.style.overflow = "";
+      document.body.style.touchAction = "";
+    }
+    return () => {
+      document.body.style.overflow = "";
+      document.body.style.touchAction = "";
+    };
+  }, [mobileMenuOpen]);
+
   const toggleTheme = () => {
     const next: "light" | "dark" = theme === "light" ? "dark" : "light";
     setTheme(next);
@@ -88,11 +103,11 @@ const Header = () => {
             : "bg-white/[0.03] backdrop-blur-xl border-white/5 py-5"
         )}
       >
-        <div className="px-6 md:px-10 flex items-center justify-between gap-4">
+        <div className="px-3 sm:px-6 md:px-10 flex items-center justify-between gap-2 sm:gap-4 min-w-0">
           {/* Logo Section */}
-          <div className="flex items-center gap-8 md:gap-12">
-            <a href="/" className="flex items-center gap-4 group transition-all active:scale-95" aria-label="home">
-              <div className="relative w-32 h-10 md:w-40 md:h-12">
+          <div className="flex items-center gap-4 md:gap-12 min-w-0 flex-shrink">
+            <a href="/" className="flex items-center gap-2 sm:gap-4 group transition-all active:scale-95 shrink-0" aria-label="home">
+              <div className="relative w-24 h-8 sm:w-32 sm:h-10 md:w-40 md:h-12">
                 <Image
                   src="/navbar_logo2_trans.png"
                   alt="MAD ALGOS"
@@ -174,13 +189,13 @@ const Header = () => {
           </div>
 
           {/* Action Buttons */}
-          <div className="flex items-center gap-3 md:gap-4">
+          <div className="flex items-center gap-2 sm:gap-3 md:gap-4 flex-shrink-0">
             <a
               href="#"
               className="group relative inline-flex items-center justify-center whitespace-nowrap overflow-hidden rounded-full p-px transition-all active:scale-95 shadow-2xl shadow-primary/10"
             >
               <div className="absolute inset-0 bg-gradient-to-r from-primary via-secondary to-primary animate-pulse" />
-              <div className="relative inline-flex items-center justify-center whitespace-nowrap bg-primary-foreground/90 font-black h-12 px-8 rounded-full text-[11px] tracking-[0.3em] text-white group-hover:text-primary group-hover:bg-transparent transition-all duration-300 uppercase">
+              <div className="relative inline-flex items-center justify-center whitespace-nowrap bg-primary-foreground/90 font-black h-10 sm:h-12 px-4 sm:px-8 rounded-full text-[10px] sm:text-[11px] tracking-[0.2em] sm:tracking-[0.3em] text-white group-hover:text-primary group-hover:bg-transparent transition-all duration-300 uppercase">
                 Join Us
               </div>
             </a>
@@ -211,18 +226,26 @@ const Header = () => {
 
             <button 
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="xl:hidden p-4 text-white bg-white/5 rounded-3xl border border-white/10 hover:bg-white/10 transition-all active:scale-95"
+              className="xl:hidden flex-shrink-0 p-3 sm:p-4 text-white bg-white/5 rounded-2xl sm:rounded-3xl border border-white/10 hover:bg-white/10 transition-all active:scale-95"
+              aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
             >
-              {mobileMenuOpen ? <X className="size-6" /> : <Menu className="size-6" />}
+              {mobileMenuOpen ? <X className="size-5 sm:size-6" /> : <Menu className="size-5 sm:size-6" />}
             </button>
           </div>
         </div>
 
-        {/* Mobile menu */}
+        {/* Mobile menu: full-viewport overlay so only menu scrolls, not page behind */}
         <div className={cn(
-          "xl:hidden absolute top-full left-0 right-0 mt-6 bg-slate-950/98 backdrop-blur-3xl border border-white/10 rounded-[3rem] p-10 transition-all duration-700 ease-[cubic-bezier(0.23,1,0.32,1)] overflow-hidden shadow-[0_60px_120px_rgba(0,0,0,1)]",
-          mobileMenuOpen ? "opacity-100 translate-y-0 max-h-[900px] visible" : "opacity-0 translate-y-12 max-h-0 invisible pointer-events-none"
+          "xl:hidden fixed inset-0 top-0 z-[99] pt-24 pb-6 px-4 transition-all duration-700 ease-[cubic-bezier(0.23,1,0.32,1)]",
+          mobileMenuOpen ? "opacity-100 visible" : "opacity-0 invisible pointer-events-none"
         )}>
+          <button
+            type="button"
+            onClick={() => setMobileMenuOpen(false)}
+            className="absolute inset-0 bg-black/60 backdrop-blur-sm -z-10"
+            aria-label="Close menu"
+          />
+          <div className="relative max-h-[calc(100vh-120px)] overflow-y-auto rounded-[2rem] bg-slate-950/98 backdrop-blur-3xl border border-white/10 shadow-[0_60px_120px_rgba(0,0,0,1)] p-8 sm:p-10">
           <div className="space-y-10">
             {NAV_ITEMS.map((item) => (
               <div key={item.name} className="space-y-6">
@@ -255,6 +278,7 @@ const Header = () => {
             >
               Contact Support
             </a>
+          </div>
           </div>
         </div>
       </nav>
