@@ -37,11 +37,17 @@ jobs:
           cp -r .next/static/. deploy/.next/static/
           cp -r public deploy/public
 
+      - name: Zip deployment
+        run: |
+          cd deploy
+          zip -r ../deploy.zip . --include="*" --include=".*" --include=".*/*"
+          cd ..
+
       - name: Upload build artifact
         uses: actions/upload-artifact@v4
         with:
           name: nextjs-build
-          path: deploy
+          path: deploy.zip
 
   deploy:
     runs-on: ubuntu-latest
@@ -52,11 +58,10 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: nextjs-build
-          path: deploy
 
       - name: Deploy to Azure
         uses: azure/webapps-deploy@v3
         with:
           app-name: MADAlgosServiceBeta
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_B2B95DFF0A5E4D85A9E235EF83667A27 }}
-          package: deploy
+          package: deploy.zip
