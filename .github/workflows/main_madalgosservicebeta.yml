@@ -26,14 +26,21 @@ jobs:
         run: npm run build
         env:
           MONGODB_URI: ${{ secrets.MONGODB_URI }}
-          # Add any other env vars your app needs at build time:
-          # NEXT_PUBLIC_SOMETHING: ${{ secrets.NEXT_PUBLIC_SOMETHING }}
 
       - name: Prepare deployment folder
         run: |
           mkdir deploy
+
+          # Copy standalone output (contains server.js)
           cp -r .next/standalone/. deploy/
+
+          # Copy the full .next folder
+          cp -r .next deploy/.next
+
+          # Copy static assets into the right place
           cp -r .next/static deploy/.next/static
+
+          # Copy public assets
           cp -r public deploy/public
 
       - name: Upload build artifact
