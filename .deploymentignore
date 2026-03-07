@@ -1,6 +1,0 @@
-# Don't zip node_modules or .next - server runs npm install and build at startup
-node_modules
-.next
-.git
-*.md
-.env*.local
