@@ -2,21 +2,11 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import { ChevronDown, Menu, X, Box, BookOpen, Mail, Sparkles, Globe, BarChart3, ShieldCheck, Sun, Moon } from "lucide-react";
+import { ChevronDown, Menu, X, Box, BookOpen, Mail, Sparkles, BarChart3, ShieldCheck, Sun, Moon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
 
 const NAV_ITEMS = [
-  { 
-    name: "ENTERPRISE HUBS", 
-    href: "#", 
-    icon: <Globe className="w-3.5 h-3.5" />,
-    dropdown: [
-      { name: "Silicon Valley Hub", href: "#", description: "Deep-tech innovation center", icon: <Globe className="w-4 h-4" /> },
-      { name: "Bengaluru Campus", href: "#", description: "B2B engineering excellence", icon: <Box className="w-4 h-4" /> },
-      { name: "Singapore Lab", href: "#", description: "Global strategy & fintech", icon: <ShieldCheck className="w-4 h-4" /> },
-    ]
-  },
   { 
     name: "AI FOUNDRY", 
     href: "#", 
