@@ -11,31 +11,48 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-      - uses: actions/setup-node@v4
+      - name: Setup Node
+        uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: npm
 
-      - run: npm install
+      - name: Install dependencies
+        run: npm install
 
-      - run: npm run build
+      - name: Build Next.js
+        run: npm run build
         env:
           MONGODB_URI: ${{ secrets.MONGODB_URI }}
           NEXT_PUBLIC_RECAPTCHA_SITE_KEY: ${{ secrets.NEXT_PUBLIC_RECAPTCHA_SITE_KEY }}
 
-      - name: Prepare standalone build
+      - name: Prepare standalone release
         run: |
           mkdir release
 
+          # Copy standalone server
           cp -r .next/standalone/* release/
+
+          # Copy public folder
           cp -r public release/public
 
+          # Create .next folder
           mkdir -p release/.next
+
+          # Copy static assets
           cp -r .next/static release/.next/static
 
-      - uses: actions/upload-artifact@v4
+          # Copy Next.js build metadata (REQUIRED)
+          cp .next/BUILD_ID release/.next/
+          cp .next/build-manifest.json release/.next/
+          cp .next/prerender-manifest.json release/.next/
+          cp .next/routes-manifest.json release/.next/
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
         with:
           name: nextjs-build
           path: release
@@ -46,12 +63,13 @@ jobs:
     needs: build
 
     steps:
-      - uses: actions/download-artifact@v4
+      - name: Download artifact
+        uses: actions/download-artifact@v4
         with:
           name: nextjs-build
           path: release
 
-      - name: Deploy to Azure
+      - name: Deploy to Azure App Service
         uses: azure/webapps-deploy@v3
         with:
           app-name: MADAlgosServiceBeta
