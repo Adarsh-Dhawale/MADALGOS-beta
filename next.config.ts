@@ -1,18 +1,13 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  // 1. Essential for Azure App Service
-  output: 'standalone',
-
-  // 2. Bypass the errors currently failing your build
+  output: 'standalone', // Generates the server.js file
   eslint: {
-    ignoreDuringBuilds: true,
+    ignoreDuringBuilds: true, // Bypasses the unescaped entities errors
   },
   typescript: {
-    ignoreBuildErrors: true,
+    ignoreBuildErrors: true, // Bypasses the empty interface errors
   },
-
-  // 3. Your existing image configuration
   images: {
     remotePatterns: [
       { protocol: "https", hostname: "**" },
