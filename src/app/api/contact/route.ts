@@ -95,11 +95,10 @@ export async function POST(req: NextRequest) {
     sgMail.setApiKey(apiKey);
 
     // From address MUST be verified in SendGrid (Single Sender or Domain). 403 = not verified.
-    // Kept hardcoded to match your previous repo.
     const fromEmail = "helpdesk@MADAlgos.in";
     const toEmail = "contact@madalgos.in";
 
-    const emailPayload = {
+    const inquiryEmail = {
       from: fromEmail,
       to: toEmail,
       subject: `New Contact Inquiry from ${name}`,
@@ -113,9 +112,34 @@ ${message}
       `.trim(),
     };
 
-    await sgMail.send(emailPayload);
-    lastSentByEmail.set(email, now);
+    try {
+      await sgMail.send(inquiryEmail);
+    } catch (sgErr: unknown) {
+      const err = sgErr as { response?: { body?: unknown; statusCode?: number } };
+      console.error("SendGrid error:", {
+        statusCode: err.response?.statusCode,
+        body: err.response?.body,
+        message: err instanceof Error ? err.message : String(err),
+      });
+      return NextResponse.json(
+        { error: "Email service failed. Please try again or contact us directly." },
+        { status: 500 }
+      );
+    }
 
+    // Send confirmation to the user who submitted
+    try {
+      await sgMail.send({
+        from: fromEmail,
+        to: email,
+        subject: "We received your message - MAD Algos",
+        text: `Hi ${name},\n\nThank you for reaching out. We have received your message and will get back to you within one business day.\n\nBest regards,\nMAD Algos Team`,
+      });
+    } catch (confirmErr) {
+      console.warn("Confirmation email failed (inquiry was sent):", confirmErr);
+    }
+
+    lastSentByEmail.set(email, now);
     console.log(`Contact inquiry saved and email sent for ${name}`);
 
     return NextResponse.json(

@@ -5,6 +5,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { UserCheck, ArrowRight, Briefcase, Verified } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { ScrollableMarquee } from '@/components/ui/scrollable-marquee';
 
 export interface HomeMentorCard {
   id: number;
@@ -97,19 +98,16 @@ const FacultySection = ({ mentors }: { mentors: HomeMentorCard[] }) => {
             Industry experts and innovators who turn real-world experience into transformative learning.
           </motion.p>
         </div>
-        {/* Horizontal marquee of mentors */}
+        {/* Horizontal marquee of mentors — faster, user can scroll/drag */}
         <div className="relative max-w-6xl mx-auto">
-          {/* Edge fades */}
           <div className="pointer-events-none absolute inset-y-0 left-0 w-24 bg-gradient-to-r from-background via-background/70 to-transparent z-20" />
           <div className="pointer-events-none absolute inset-y-0 right-0 w-24 bg-gradient-to-l from-background via-background/70 to-transparent z-20" />
 
-          <div className="overflow-hidden py-4">
-            <div className="flex gap-6 animate-[marquee_45s_linear_infinite]">
-              {[...safeMentors, ...safeMentors].map((mentor, idx) => (
-                <MentorCard key={`${mentor.name}-${idx}`} mentor={mentor} />
-              ))}
-            </div>
-          </div>
+          <ScrollableMarquee speed={150} className="py-4" innerClassName="flex gap-6">
+            {safeMentors.map((mentor, idx) => (
+              <MentorCard key={`${mentor.name}-${idx}`} mentor={mentor} />
+            ))}
+          </ScrollableMarquee>
 
           <div className="mt-10 flex justify-center">
             <Link

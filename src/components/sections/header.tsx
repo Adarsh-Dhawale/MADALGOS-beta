@@ -1,7 +1,8 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { ChevronDown, Menu, X, Calendar, Box, BookOpen, Info, Mail, Briefcase, Search, Bell, Sparkles, Globe, BarChart3, ShieldCheck, Sun, Moon } from "lucide-react";
+import Link from "next/link";
+import { ChevronDown, Menu, X, Box, BookOpen, Mail, Sparkles, Globe, BarChart3, ShieldCheck, Sun, Moon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
 
@@ -9,6 +10,7 @@ const NAV_ITEMS = [
   { 
     name: "ENTERPRISE HUBS", 
     href: "#", 
+    icon: <Globe className="w-3.5 h-3.5" />,
     dropdown: [
       { name: "Silicon Valley Hub", href: "#", description: "Deep-tech innovation center", icon: <Globe className="w-4 h-4" /> },
       { name: "Bengaluru Campus", href: "#", description: "B2B engineering excellence", icon: <Box className="w-4 h-4" /> },
@@ -18,6 +20,7 @@ const NAV_ITEMS = [
   { 
     name: "AI FOUNDRY", 
     href: "#", 
+    icon: <Sparkles className="w-3.5 h-3.5" />,
     dropdown: [
       { name: "LLM Orchestration", href: "#", description: "Enterprise-grade models", icon: <Sparkles className="w-4 h-4" /> },
       { name: "Agentic Systems", href: "#", description: "Autonomous workflows", icon: <Box className="w-4 h-4" /> },
@@ -27,6 +30,7 @@ const NAV_ITEMS = [
   { 
     name: "INSIGHTS", 
     href: "#", 
+    icon: <BookOpen className="w-3.5 h-3.5" />,
     dropdown: [
       { name: "Whitepapers", href: "#", description: "Industry deep dives", icon: <BookOpen className="w-4 h-4" /> },
       { name: "B2B Benchmarks", href: "#", description: "Performance data", icon: <BarChart3 className="w-4 h-4" /> },
@@ -40,7 +44,13 @@ const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
+  const [mobileExpanded, setMobileExpanded] = useState<string | null>(null);
   const [theme, setTheme] = useState<"light" | "dark">("dark");
+
+  const closeMobileMenu = () => {
+    setMobileMenuOpen(false);
+    setMobileExpanded(null);
+  };
 
   useEffect(() => {
     const handleScroll = () => {
@@ -106,7 +116,7 @@ const Header = () => {
         <div className="px-3 sm:px-6 md:px-10 flex items-center justify-between gap-2 sm:gap-4 min-w-0">
           {/* Logo Section */}
           <div className="flex items-center gap-4 md:gap-12 min-w-0 flex-shrink">
-            <a href="/" className="flex items-center gap-2 sm:gap-4 group transition-all active:scale-95 shrink-0" aria-label="home">
+            <Link href="/" className="flex items-center gap-2 sm:gap-4 group transition-all active:scale-95 shrink-0" aria-label="home">
               <div className="relative w-24 h-8 sm:w-32 sm:h-10 md:w-40 md:h-12">
                 <Image
                   src="/navbar_logo2_trans.png"
@@ -116,7 +126,7 @@ const Header = () => {
                   priority
                 />
               </div>
-            </a>
+            </Link>
 
             {/* Desktop Navigation */}
             <div className="hidden xl:flex items-center gap-12">
@@ -128,7 +138,7 @@ const Header = () => {
                     onMouseEnter={() => setActiveDropdown(item.name)}
                     onMouseLeave={() => setActiveDropdown(null)}
                   >
-                    <a
+                    <Link
                       href={item.href}
                       className="flex items-center gap-3 hover:text-white transition-all duration-300 group-hover/item:text-primary"
                     >
@@ -146,7 +156,7 @@ const Header = () => {
                           activeDropdown === item.name ? "rotate-180 text-primary" : "opacity-40"
                         )} />
                       )}
-                    </a>
+                    </Link>
                     
                     {item.dropdown && (
                       <div className={cn(
@@ -158,7 +168,7 @@ const Header = () => {
                         <div className="w-[340px] rounded-[2.5rem] bg-slate-950/95 backdrop-blur-3xl border border-white/10 shadow-[0_40px_120px_rgba(0,0,0,0.9)] overflow-hidden p-4 ring-1 ring-white/5">
                           <div className="grid grid-cols-1 gap-2">
                             {item.dropdown.map((subItem) => (
-                              <a
+                              <Link
                                 key={subItem.name}
                                 href={subItem.href}
                                 className="group/sub flex items-start gap-5 p-5 rounded-3xl hover:bg-white/5 transition-all duration-300"
@@ -170,14 +180,14 @@ const Header = () => {
                                   <p className="text-[14px] font-black text-white group-hover/sub:text-primary transition-colors uppercase tracking-tight">{subItem.name}</p>
                                   <p className="text-[11px] font-medium text-muted-foreground group-hover/sub:text-gray-300 transition-colors leading-relaxed line-clamp-1">{subItem.description}</p>
                                 </div>
-                              </a>
+                              </Link>
                             ))}
                           </div>
                           <div className="mt-3 p-4 bg-white/5 rounded-3xl border border-white/5 group-hover:bg-white/10 transition-all">
-                             <a href="#" className="flex items-center justify-between px-2 group/btn">
+                             <Link href="#" className="flex items-center justify-between px-2 group/btn">
                                <span className="text-[11px] font-black text-primary tracking-[0.4em] uppercase">Enterprise Access</span>
                                <Sparkles className="w-4 h-4 text-primary group-hover/btn:rotate-12 transition-transform" />
-                             </a>
+                             </Link>
                           </div>
                         </div>
                       </div>
@@ -241,7 +251,7 @@ const Header = () => {
         )}>
           <button
             type="button"
-            onClick={() => setMobileMenuOpen(false)}
+            onClick={closeMobileMenu}
             className="absolute inset-0 bg-black/60 backdrop-blur-sm -z-10"
             aria-label="Close menu"
           />
@@ -249,35 +259,49 @@ const Header = () => {
           <div className="space-y-10">
             {NAV_ITEMS.map((item) => (
               <div key={item.name} className="space-y-6">
-                <button className="flex items-center justify-between w-full text-white font-black text-lg tracking-[0.2em] group uppercase">
-                  {item.name}
-                  {item.dropdown && <ChevronDown className="w-6 h-6 opacity-40 group-hover:text-primary transition-all" />}
-                </button>
-                {item.dropdown && (
-                  <div className="grid grid-cols-1 gap-4 pl-6 border-l-2 border-white/5">
-                    {item.dropdown.map((sub) => (
-                      <a key={sub.name} href={sub.href} className="text-[14px] font-black text-muted-foreground hover:text-primary transition-colors py-1.5 uppercase tracking-widest">
-                        {sub.name}
-                      </a>
-                    ))}
-                  </div>
+                {item.dropdown ? (
+                  <>
+                    <button
+                      type="button"
+                      onClick={() => setMobileExpanded(mobileExpanded === item.name ? null : item.name)}
+                      className="flex items-center justify-between w-full text-left text-white font-black text-lg tracking-[0.2em] group uppercase"
+                    >
+                      <span className="flex items-center gap-3">
+                        {item.icon && (
+                          <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-white/5 border border-white/10 text-muted-foreground group-hover:text-primary">
+                            {item.icon}
+                          </span>
+                        )}
+                        {item.name}
+                      </span>
+                      <ChevronDown className={cn("w-6 h-6 opacity-40 transition-transform", mobileExpanded === item.name && "rotate-180 text-primary")} />
+                    </button>
+                    {mobileExpanded === item.name && (
+                      <div className="grid grid-cols-1 gap-4 pl-6 border-l-2 border-white/5">
+                        {item.dropdown.map((sub) => (
+                          <Link key={sub.name} href={sub.href} onClick={closeMobileMenu} className="text-[14px] font-black text-muted-foreground hover:text-primary transition-colors py-1.5 uppercase tracking-widest block">
+                            {sub.name}
+                          </Link>
+                        ))}
+                      </div>
+                    )}
+                  </>
+                ) : (
+                  <Link
+                    href={item.href}
+                    onClick={closeMobileMenu}
+                    className="flex items-center gap-3 text-white font-black text-lg tracking-[0.2em] hover:text-primary transition-colors uppercase w-full"
+                  >
+                    {item.icon && (
+                      <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-white/5 border border-white/10 text-muted-foreground">
+                        {item.icon}
+                      </span>
+                    )}
+                    {item.name}
+                  </Link>
                 )}
               </div>
             ))}
-          </div>
-          <div className="mt-12 pt-10 border-t border-white/10 flex flex-col gap-5">
-            <a
-              href="#"
-              className="w-full inline-flex items-center justify-center font-black h-16 rounded-[2rem] bg-primary text-slate-950 text-[13px] tracking-[0.3em] shadow-2xl shadow-primary/20 uppercase"
-            >
-              Access Portal
-            </a>
-            <a
-              href="#"
-              className="w-full inline-flex items-center justify-center font-black h-16 rounded-[2rem] bg-white/5 text-white border border-white/10 text-[13px] tracking-[0.3em] uppercase"
-            >
-              Contact Support
-            </a>
           </div>
           </div>
         </div>

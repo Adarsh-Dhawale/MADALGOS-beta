@@ -3,6 +3,7 @@
 import React from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
+import { ScrollableMarquee } from "@/components/ui/scrollable-marquee";
 
 const AlumniSection = () => {
   const logos = [
@@ -42,18 +43,15 @@ const AlumniSection = () => {
           high-growth startups, and unicorns worldwide.
         </motion.p>
 
-        {/* Logo Marquee */}
-        <div className="relative mt-24 overflow-hidden">
+        {/* Logo Marquee — faster, user can scroll/drag */}
+        <div className="relative mt-24">
+          <div className="absolute left-0 top-0 h-full w-32 bg-gradient-to-r from-background to-transparent z-10 pointer-events-none" />
+          <div className="absolute right-0 top-0 h-full w-32 bg-gradient-to-l from-background to-transparent z-10 pointer-events-none" />
 
-          {/* Gradient Fades */}
-          <div className="absolute left-0 top-0 h-full w-32 bg-gradient-to-r from-background to-transparent z-10" />
-          <div className="absolute right-0 top-0 h-full w-32 bg-gradient-to-l from-background to-transparent z-10" />
-
-          <div className="flex gap-12 animate-[marquee_24s_linear_infinite] items-center">
-
-            {[...logos, ...logos].map((logo, index) => (
+          <ScrollableMarquee speed={140} className="py-4" innerClassName="flex gap-12 items-center">
+            {logos.map((logo, index) => (
               <div
-                key={index}
+                key={`${logo.name}-${index}`}
                 className="relative h-32 w-64 md:h-40 md:w-72 flex-shrink-0 overflow-hidden rounded-2xl bg-white"
               >
                 <Image
@@ -66,8 +64,7 @@ const AlumniSection = () => {
                 />
               </div>
             ))}
-
-          </div>
+          </ScrollableMarquee>
         </div>
 
       </div>
