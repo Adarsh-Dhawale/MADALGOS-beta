@@ -1,13 +1,16 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  output: 'standalone', // Generates the server.js file
+  output: "standalone",
+
   eslint: {
-    ignoreDuringBuilds: true, // Bypasses the unescaped entities errors
+    ignoreDuringBuilds: true,
   },
+
   typescript: {
-    ignoreBuildErrors: true, // Bypasses the empty interface errors
+    ignoreBuildErrors: true,
   },
+
   images: {
     remotePatterns: [
       { protocol: "https", hostname: "**" },
