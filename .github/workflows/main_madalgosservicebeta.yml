@@ -1,10 +1,9 @@
-name: Build and deploy Next.js app to Azure Web App
+name: Deploy Next.js to Azure
 
 on:
   push:
     branches:
       - main
-  workflow_dispatch:
 
 jobs:
 
@@ -12,43 +11,34 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - uses: actions/setup-node@v4
         with:
-          node-version: "20.x"
-          cache: "npm"
+          node-version: 20
+          cache: npm
 
-      - name: Install dependencies
-        run: npm install
+      - run: npm install
 
-      - name: Build Next.js App
-        run: npm run build
+      - run: npm run build
         env:
           MONGODB_URI: ${{ secrets.MONGODB_URI }}
           NEXT_PUBLIC_RECAPTCHA_SITE_KEY: ${{ secrets.NEXT_PUBLIC_RECAPTCHA_SITE_KEY }}
 
-      - name: Prepare deployment package
+      - name: Prepare standalone build
         run: |
-          mkdir deploy
+          mkdir release
 
-          # Copy standalone server
-          cp -r .next/standalone/* deploy/
+          cp -r .next/standalone/* release/
+          cp -r public release/public
 
-          # Copy static assets
-          mkdir -p deploy/.next
-          cp -r .next/static deploy/.next/static
+          mkdir -p release/.next
+          cp -r .next/static release/.next/static
 
-          # Copy public folder
-          cp -r public deploy/public
-
-      - name: Upload artifact
-        uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v4
         with:
-          name: nextjs-app
-          path: deploy
+          name: nextjs-build
+          path: release
 
 
   deploy:
@@ -56,14 +46,14 @@ jobs:
     needs: build
 
     steps:
-      - name: Download artifact
-        uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v4
         with:
-          name: nextjs-app
+          name: nextjs-build
+          path: release
 
-      - name: Deploy to Azure Web App
+      - name: Deploy to Azure
         uses: azure/webapps-deploy@v3
         with:
           app-name: MADAlgosServiceBeta
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_B2B95DFF0A5E4D85A9E235EF83667A27 }}
-          package: .
+          package: release
