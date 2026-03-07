@@ -27,40 +27,15 @@ jobs:
         env:
           MONGODB_URI: ${{ secrets.MONGODB_URI }}
 
-      - name: Debug build output
-        run: |
-          echo "=== .next contents ==="
-          ls -la .next/
-          echo "=== standalone contents ==="
-          ls -la .next/standalone/
-          echo "=== standalone .next contents ==="
-          ls -la .next/standalone/.next/ || echo "No .next inside standalone"
-
       - name: Prepare deployment folder
         run: |
-          # Start fresh
           mkdir -p deploy
-
-          # Copy standalone (this already includes server.js and node_modules)
           cp -r .next/standalone/. deploy/
-
-          # Remove the empty/partial .next that standalone might have
           rm -rf deploy/.next
-
-          # Copy the FULL .next build output
           cp -r .next deploy/.next
-
-          # Ensure static files are in place
-          mkdir -p deploy/.next/static
+          rm -rf deploy/.next/standalone
           cp -r .next/static/. deploy/.next/static/
-
-          # Copy public assets
           cp -r public deploy/public
-
-          echo "=== Final deploy structure ==="
-          ls -la deploy/
-          echo "=== deploy/.next contents ==="
-          ls -la deploy/.next/
 
       - name: Upload build artifact
         uses: actions/upload-artifact@v4
