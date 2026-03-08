@@ -1,11 +1,28 @@
 "use client";
 
-import React, { FormEvent, useState } from "react";
+import React, { FormEvent, useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import { Mail, Phone, MapPin, Send } from "lucide-react";
+
+const WhatsAppIcon = () => (
+  <svg viewBox="0 0 24 24" width={20} height={20} fill="currentColor" className="text-[#25D366]">
+    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
+  </svg>
+);
 import Header from "@/components/sections/header";
 import Footer from "@/components/sections/footer";
 import ReCaptchaComponent from "@/components/Auth/ReCaptcha";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+} from "@/components/ui/dialog";
+
+const WHATSAPP_BASE = "https://api.whatsapp.com/send";
+const phone1 = "919599204039";
+const phone2 = "917032257346";
 
 const ContactPage = () => {
   const [submitting, setSubmitting] = useState(false);
@@ -13,21 +30,48 @@ const ContactPage = () => {
   const [statusMessage, setStatusMessage] = useState<string>("");
   const [verified, setVerified] = useState(false);
   const [token, setToken] = useState<string | null>(null);
+  const [successDialogOpen, setSuccessDialogOpen] = useState(false);
+  const [emailError, setEmailError] = useState<string>("");
+  const [emailTouched, setEmailTouched] = useState(false);
+  const contactDigitsRef = useRef<HTMLInputElement>(null);
+
+  const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const validateEmail = (value: string) => {
+    if (!value.trim()) return "";
+    return EMAIL_REGEX.test(value.trim()) ? "" : "Please enter a valid email address.";
+  };
+
+  // Scroll contact form into view when page loads so it's visible without manual scroll
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      document.getElementById("contact-form")?.scrollIntoView({ behavior: "smooth", block: "start" });
+    }, 100);
+    return () => clearTimeout(timer);
+  }, []);
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // Save form ref immediately — e.currentTarget becomes null after any await
     const form = e.currentTarget;
     setSubmitting(true);
     setStatus("idle");
     setStatusMessage("");
 
     const formData = new FormData(form);
+    const email = (formData.get("email") as string) ?? "";
+    if (validateEmail(email)) {
+      setStatus("error");
+      setStatusMessage("Please enter a valid email address.");
+      setSubmitting(false);
+      return;
+    }
+    const digits = (formData.get("contact_digits") as string)?.replace(/\D/g, "") ?? "";
+    const phone = digits ? `+91${digits}` : "";
     const payload = {
       name: formData.get("name") as string,
-      email: formData.get("email") as string,
-      phone: formData.get("contact") as string,
+      email: email.trim(),
+      phone: phone || undefined,
       message: formData.get("message") as string,
+      organization: (formData.get("organization") as string) || undefined,
       token,
     };
 
@@ -51,12 +95,11 @@ const ContactPage = () => {
       }
 
       setStatus("success");
-      setStatusMessage(
-        data?.message || "Message sent successfully. We'll get back to you shortly."
-      );
       form.reset();
+      if (contactDigitsRef.current) contactDigitsRef.current.value = "";
       setToken(null);
       setVerified(false);
+      setSuccessDialogOpen(true);
     } catch (err) {
       console.error(err);
       setStatus("error");
@@ -130,9 +173,11 @@ const ContactPage = () => {
                 Talk to the MAD Algos team
               </h2>
               <p className="mb-8 text-sm text-muted-foreground leading-relaxed max-w-md">
-                You can email us directly at{" "}
-                <span className="font-semibold text-card-foreground">contact@MADAlgos.in</span> or use the
-                form alongside to schedule a call or request a custom proposal.
+                You can email us at{" "}
+                <a href="mailto:contact@MADAlgos.in" className="font-semibold text-card-foreground hover:text-primary">contact@MADAlgos.in</a>
+                {" "}or{" "}
+                <a href="mailto:team@MADAlgos.in" className="font-semibold text-card-foreground hover:text-primary">team@MADAlgos.in</a>
+                , or use the form alongside to schedule a call or request a custom proposal.
               </p>
 
               <div className="space-y-4">
@@ -162,7 +207,26 @@ const ContactPage = () => {
                     <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">
                       Phone
                     </p>
-                    <p className="mt-1 text-sm text-card-foreground">+91 203 302 9545</p>
+                    <p className="mt-1 text-sm text-card-foreground">
+                      <a href="tel:+919599204039" className="hover:text-primary">+91-9599204039</a>
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-4 rounded-2xl bg-muted px-4 py-4">
+                  <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-[#25D366]/15">
+                    <WhatsAppIcon />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">
+                      WhatsApp
+                    </p>
+                    <p className="mt-1 text-sm text-card-foreground">
+                      <a href={`${WHATSAPP_BASE}/?phone=${phone1}&text=&type=phone_number&app_absent=0`} target="_blank" rel="noopener noreferrer" className="text-[#25D366] hover:underline font-medium">+91-9599204039</a>
+                    </p>
+                    <p className="mt-1 text-sm text-card-foreground">
+                      <a href={`${WHATSAPP_BASE}/?phone=${phone2}&text=&type=phone_number&app_absent=0`} target="_blank" rel="noopener noreferrer" className="text-[#25D366] hover:underline font-medium">+91-7032257346</a>
+                    </p>
                   </div>
                 </div>
 
@@ -174,15 +238,18 @@ const ContactPage = () => {
                     <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">
                       Email
                     </p>
-                    <p className="mt-1 text-sm text-card-foreground">contact@MADAlgos.in</p>
+                    <p className="mt-1 text-sm text-card-foreground">
+                      <a href="mailto:contact@MADAlgos.in" className="hover:text-primary">contact@MADAlgos.in</a>
+                      <br />
+                      <a href="mailto:team@MADAlgos.in" className="hover:text-primary">team@MADAlgos.in</a>
+                    </p>
                   </div>
                 </div>
               </div>
             </div>
 
             {/* Right column: contact form */}
-            <div className="relative px-8 py-10 md:px-10">
-              {/* soft gradient bar at top of form panel */}
+            <div id="contact-form" className="relative px-8 py-10 md:px-10 scroll-mt-32">
               <div className="pointer-events-none absolute left-8 right-8 top-4 h-10 rounded-[1.5rem] bg-gradient-to-r from-[#2ab5a0] via-[#27c2ae] to-[#0ea5e9] opacity-80 blur-[10px]" />
 
               <div className="relative rounded-[2rem] bg-[#111111]/96 px-6 pt-10 pb-7 shadow-[0_30px_90px_rgba(0,0,0,0.7)]">
@@ -212,8 +279,20 @@ const ContactPage = () => {
                         type="email"
                         name="email"
                         placeholder="you@example.com"
-                        className="h-11 w-full rounded-full border border-white/10 bg-[#1c1c1c] px-4 text-sm text-white placeholder:text-slate-500 focus:border-[#2ab5a0] focus:outline-none focus:ring-2 focus:ring-[#2ab5a0]/60 transition"
+                        className={`h-11 w-full rounded-full border bg-[#1c1c1c] px-4 text-sm text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-[#2ab5a0]/60 transition ${
+                          emailError ? "border-red-400/60" : "border-white/10 focus:border-[#2ab5a0]"
+                        }`}
+                        onBlur={(e) => {
+                          setEmailTouched(true);
+                          setEmailError(validateEmail(e.target.value));
+                        }}
+                        onChange={(e) => {
+                          if (emailTouched) setEmailError(validateEmail(e.target.value));
+                        }}
                       />
+                      {emailError && (
+                        <p className="text-xs text-red-400">{emailError}</p>
+                      )}
                     </div>
                   </div>
 
@@ -221,10 +300,29 @@ const ContactPage = () => {
                     <label className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-500">
                       Contact
                     </label>
+                    <div className="flex h-11 w-full rounded-full border border-white/10 bg-[#1c1c1c] overflow-hidden focus-within:border-[#2ab5a0] focus-within:ring-2 focus-within:ring-[#2ab5a0]/60 transition">
+                      <span className="flex items-center pl-4 text-sm text-slate-400 shrink-0">+91</span>
+                      <input
+                        ref={contactDigitsRef}
+                        type="tel"
+                        name="contact_digits"
+                        placeholder="Enter 10-digit number"
+                        maxLength={10}
+                        inputMode="numeric"
+                        pattern="[0-9]*"
+                        className="flex-1 min-w-0 bg-transparent px-3 py-2 text-sm text-white placeholder:text-slate-500 outline-none"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="space-y-1.5">
+                    <label className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-500">
+                      College / University / Organization <span className="text-slate-600 normal-case">(optional)</span>
+                    </label>
                     <input
-                      type="tel"
-                      name="contact"
-                      placeholder="+91"
+                      type="text"
+                      name="organization"
+                      placeholder="e.g. IIT Delhi, Acme Corp"
                       className="h-11 w-full rounded-full border border-white/10 bg-[#1c1c1c] px-4 text-sm text-white placeholder:text-slate-500 focus:border-[#2ab5a0] focus:outline-none focus:ring-2 focus:ring-[#2ab5a0]/60 transition"
                     />
                   </div>
@@ -249,16 +347,11 @@ const ContactPage = () => {
                   className="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-full bg-gradient-to-r from-[#2ab5a0] to-[#136b60] px-6 py-3 text-xs md:text-sm font-semibold uppercase tracking-[0.22em] text-white shadow-[0_12px_36px_rgba(42,181,160,0.55)] hover:brightness-110 active:scale-95 transition disabled:opacity-60 disabled:cursor-not-allowed"
                 >
                   <Send className="h-4 w-4" />
-                  {submitting ? "Sending..." : "Send Message"}
+                  {submitting ? "Sending message..." : "Send Message"}
                 </button>
 
-                {status !== "idle" && (
-                  <p
-                    className={[
-                      "pt-2 text-xs md:text-sm",
-                      status === "success" ? "text-emerald-400" : "text-red-400",
-                    ].join(" ")}
-                  >
+                {status === "error" && (
+                  <p className="pt-2 text-xs md:text-sm text-red-400">
                     {statusMessage}
                   </p>
                 )}
@@ -269,6 +362,26 @@ const ContactPage = () => {
         </section>
       </main>
       <Footer />
+
+      <Dialog open={successDialogOpen} onOpenChange={setSuccessDialogOpen}>
+        <DialogContent className="bg-slate-950 border-white/10 text-white">
+          <DialogHeader>
+            <DialogTitle className="text-xl text-primary">Thank you</DialogTitle>
+          </DialogHeader>
+          <p className="text-slate-200">
+            We have received your email and we will reach out to you within 48 hrs.
+          </p>
+          <DialogFooter>
+            <button
+              type="button"
+              onClick={() => setSuccessDialogOpen(false)}
+              className="rounded-full bg-primary px-6 py-2 text-sm font-semibold text-slate-950 hover:brightness-110"
+            >
+              OK
+            </button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };

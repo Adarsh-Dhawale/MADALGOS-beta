@@ -2,7 +2,7 @@ import React from "react";
 import Header from "@/components/sections/header";
 import Hero from "@/components/sections/hero";
 import Advantages from "@/components/sections/advantages";
-import Campuses from "@/components/sections/campuses";
+import PastEventsSection from "@/components/sections/past-events";
 import Specializations from "@/components/sections/specializations";
 import Curriculum from "@/components/sections/curriculum";
 import LearningBeyondClassroom from "@/components/sections/learning-beyond";
@@ -60,8 +60,8 @@ export default async function Home() {
         {/* Section 2: Best of Both Worlds / Earth */}
         <Advantages />
 
-        {/* Section 3: Global Innovation Centers / Hubs */}
-        <Campuses />
+        {/* Section 3: Past events / What we've done */}
+        <PastEventsSection />
 
         {/* Section 4: Enterprise Protocols / Specializations */}
         <Specializations />

@@ -29,7 +29,7 @@ All personal information that you provide to us must be true, complete and accur
 We use personal information collected via our Website for a variety of business purposes described below. We process your personal information for these purposes in reliance on our legitimate business interests, in order to enter into or perform a contract with you, with your consent, and/or for compliance with our legal obligations.`,
     list: [
       "To facilitate account creation and logon process. If you choose to link your account with us to a third-party account (such as your Google or Facebook account), we use the information you allowed us to collect from those third parties to facilitate account creation and logon process.",
-      "To post testimonials. We post testimonials on our Website that may contain personal information. Prior to posting a testimonial, we will obtain your consent to use your name and the content of the testimonial. If you wish to update or delete your testimonial, please contact us at contact@madalgos.in.",
+      "To post testimonials. We post testimonials on our Website that may contain personal information. Prior to posting a testimonial, we will obtain your consent to use your name and the content of the testimonial. If you wish to update or delete your testimonial, please contact us at contact@MADAlgos.in.",
       "Request feedback. We may use your information to request feedback and to contact you about your use of our Website.",
       "To enable user-to-user communications. We may use your information in order to enable user-to-user communications with each user's consent.",
       "To manage user accounts. We may use your information for the purposes of managing our account and keeping it in working order.",
@@ -90,7 +90,7 @@ If we are relying on your consent to process your personal information, you have
 
 If you are a resident in the EEA or UK and you believe we are unlawfully processing your personal information, you also have the right to complain to your local data protection supervisory authority. You can find their contact details here: https://ec.europa.eu/justice/data-protection/bodies/authorities/index_en.htm.
 
-If you have questions or comments about your privacy rights, you may email us at contact@madalgos.in.
+If you have questions or comments about your privacy rights, you may email us at contact@MADAlgos.in or team@MADAlgos.in.
 
 Account Information — If you would at any time like to review or change the information in your account or terminate your account, please contact us using the contact information provided. Upon your request to terminate your account, we will deactivate or delete your account and information from our active databases. However, we may retain some information in our files to prevent fraud, troubleshoot problems, assist with any investigations, enforce our Terms of Use and/or comply with applicable legal requirements.
 
@@ -120,13 +120,13 @@ We may update this privacy notice from time to time. The updated version will be
   {
     id: 11,
     title: "HOW CAN YOU CONTACT US ABOUT THIS NOTICE?",
-    content: `If you have questions or comments about this notice, you may email us at contact@madalgos.in or by post to:
+    content: `If you have questions or comments about this notice, you may email us at contact@MADAlgos.in or team@MADAlgos.in or by post to:
 
 MAD Algos
 Nallagandla Hyderabad India
 Hyderabad, Telangana 500019 India
-Phone: +91-7032257346
-Email: contact@madalgos.in`,
+Phone: +91-9599204039
+Email: contact@MADAlgos.in, team@MADAlgos.in`,
   },
   {
     id: 12,
@@ -182,10 +182,10 @@ export default function PrivacyPage() {
               ("Company," "we," "us," or "our"). We are committed to protecting your
               personal information and your right to privacy. If you have any questions
               or concerns about this privacy notice or our practices with regard to your
-              personal information, please contact us at{" "}
-              <a href="mailto:contact@madalgos.in" className="text-primary hover:underline">
-                contact@madalgos.in
-              </a>
+              personal information,               please contact us at{" "}
+              <a href="mailto:contact@MADAlgos.in" className="text-primary hover:underline">contact@MADAlgos.in</a>
+              {" "}or{" "}
+              <a href="mailto:team@MADAlgos.in" className="text-primary hover:underline">team@MADAlgos.in</a>
               .
             </p>
             <p>
@@ -279,15 +279,19 @@ export default function PrivacyPage() {
               <p>Telangana, India</p>
               <p className="pt-2">
                 Phone:{" "}
-                <a href="tel:+917032257346" className="text-primary hover:underline">
-                  +91-7032257346
-                </a>
+                <a href="tel:+919599204039" className="text-primary hover:underline">+91-9599204039</a>
+              </p>
+              <p>
+                WhatsApp:{" "}
+                <a href="https://api.whatsapp.com/send/?phone=919599204039&text=&type=phone_number&app_absent=0" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">+91-9599204039</a>
+                {" · "}
+                <a href="https://api.whatsapp.com/send/?phone=917032257346&text=&type=phone_number&app_absent=0" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">+91-7032257346</a>
               </p>
               <p>
                 Email:{" "}
-                <a href="mailto:contact@madalgos.in" className="text-primary hover:underline">
-                  contact@madalgos.in
-                </a>
+                <a href="mailto:contact@MADAlgos.in" className="text-primary hover:underline">contact@MADAlgos.in</a>
+                {" · "}
+                <a href="mailto:team@MADAlgos.in" className="text-primary hover:underline">team@MADAlgos.in</a>
               </p>
             </address>
           </div>

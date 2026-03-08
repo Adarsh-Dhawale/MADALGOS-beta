@@ -2,30 +2,18 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import { ChevronDown, Menu, X, Box, BookOpen, Mail, Sparkles, BarChart3, ShieldCheck, Sun, Moon } from "lucide-react";
+import { ChevronDown, Menu, X, BookOpen, Mail, Sparkles, Sun, Moon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
 
-const NAV_ITEMS = [
-  { 
-    name: "AI FOUNDRY", 
-    href: "#", 
-    icon: <Sparkles className="w-3.5 h-3.5" />,
-    dropdown: [
-      { name: "LLM Orchestration", href: "#", description: "Enterprise-grade models", icon: <Sparkles className="w-4 h-4" /> },
-      { name: "Agentic Systems", href: "#", description: "Autonomous workflows", icon: <Box className="w-4 h-4" /> },
-      { name: "MLOps Protocol", href: "#", description: "Production scaling", icon: <BarChart3 className="w-4 h-4" /> },
-    ]
-  },
-  { 
-    name: "INSIGHTS", 
-    href: "#", 
-    icon: <BookOpen className="w-3.5 h-3.5" />,
-    dropdown: [
-      { name: "Whitepapers", href: "#", description: "Industry deep dives", icon: <BookOpen className="w-4 h-4" /> },
-      { name: "B2B Benchmarks", href: "#", description: "Performance data", icon: <BarChart3 className="w-4 h-4" /> },
-    ]
-  },
+// AI FOUNDRY & INSIGHTS hidden for now — enable later when needed
+type NavItem = {
+  name: string;
+  href: string;
+  icon: React.ReactNode;
+  dropdown?: { name: string; href: string; description?: string; icon?: React.ReactNode }[];
+};
+const NAV_ITEMS: NavItem[] = [
   { name: "BLOGS", href: "/blogs", icon: <BookOpen className="w-3.5 h-3.5" /> },
   { name: "CONTACT US", href: "/contact", icon: <Mail className="w-3.5 h-3.5" /> },
 ];
@@ -188,28 +176,8 @@ const Header = () => {
             </div>
           </div>
 
-          {/* Action Buttons */}
+          {/* Action Buttons — Join Us & Log In hidden for now */}
           <div className="flex items-center gap-2 sm:gap-3 md:gap-4 flex-shrink-0">
-            <a
-              href="#"
-              className="group relative inline-flex items-center justify-center whitespace-nowrap overflow-hidden rounded-full p-px transition-all active:scale-95 shadow-2xl shadow-primary/10"
-            >
-              <div className="absolute inset-0 bg-gradient-to-r from-primary via-secondary to-primary animate-pulse" />
-              <div className="relative inline-flex items-center justify-center whitespace-nowrap bg-primary-foreground/90 font-black h-10 sm:h-12 px-4 sm:px-8 rounded-full text-[10px] sm:text-[11px] tracking-[0.2em] sm:tracking-[0.3em] text-white group-hover:text-primary group-hover:bg-transparent transition-all duration-300 uppercase">
-                Join Us
-              </div>
-            </a>
-
-            <a
-              href="#"
-              className="hidden md:inline-flex group relative items-center justify-center whitespace-nowrap overflow-hidden rounded-full p-px transition-all active:scale-95 shadow-2xl shadow-primary/10"
-            >
-              <div className="absolute inset-0 bg-gradient-to-r from-primary via-secondary to-primary animate-pulse" />
-              <div className="relative inline-flex items-center justify-center whitespace-nowrap bg-primary-foreground/90 font-black h-12 px-8 rounded-full text-[11px] tracking-[0.3em] text-white group-hover:text-primary group-hover:bg-transparent transition-all duration-300 uppercase">
-                Log In
-              </div>
-            </a>
-
             {/* Theme toggle - extreme right */}
             <button
               type="button"

@@ -246,18 +246,19 @@ export default function TermsPage() {
               <p>Telangana, India</p>
               <p className="pt-2">
                 Phone:{" "}
-                <a href="tel:+917032257346" className="text-primary hover:underline">
-                  +91-7032257346
-                </a>
+                <a href="tel:+919599204039" className="text-primary hover:underline">+91-9599204039</a>
+              </p>
+              <p>
+                WhatsApp:{" "}
+                <a href="https://api.whatsapp.com/send/?phone=919599204039&text=&type=phone_number&app_absent=0" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">+91-9599204039</a>
+                {" · "}
+                <a href="https://api.whatsapp.com/send/?phone=917032257346&text=&type=phone_number&app_absent=0" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">+91-7032257346</a>
               </p>
               <p>
                 Email:{" "}
-                <a
-                  href="mailto:contact@madalgos.in"
-                  className="text-primary hover:underline"
-                >
-                  contact@madalgos.in
-                </a>
+                <a href="mailto:contact@MADAlgos.in" className="text-primary hover:underline">contact@MADAlgos.in</a>
+                {" · "}
+                <a href="mailto:team@MADAlgos.in" className="text-primary hover:underline">team@MADAlgos.in</a>
               </p>
             </address>
           </div>

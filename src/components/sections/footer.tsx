@@ -25,9 +25,13 @@ const Footer = () => {
     { name: 'Careers', href: '#' },
   ];
 
+  const WHATSAPP_BASE = 'https://api.whatsapp.com/send/?phone=';
   const contactInfo = [
-    { icon: <Phone size={16} className="text-primary" />, label: '+91 800 210 8080', href: 'tel:+918002108080' },
-    { icon: <Mail size={16} className="text-primary" />, label: 'hello@madalgos.com', href: 'mailto:hello@madalgos.com' },
+    { icon: <Phone size={16} className="text-primary" />, label: '+91-9599204039', href: 'tel:+919599204039' },
+    { icon: <WhatsAppIcon />, label: 'WhatsApp +91-9599204039', href: `${WHATSAPP_BASE}919599204039&text=&type=phone_number&app_absent=0` },
+    { icon: <WhatsAppIcon />, label: 'WhatsApp +91-7032257346', href: `${WHATSAPP_BASE}917032257346&text=&type=phone_number&app_absent=0` },
+    { icon: <Mail size={16} className="text-primary" />, label: 'contact@MADAlgos.in', href: 'mailto:contact@MADAlgos.in' },
+    { icon: <Mail size={16} className="text-primary" />, label: 'team@MADAlgos.in', href: 'mailto:team@MADAlgos.in' },
   ];
 
   const socialLinks = [
@@ -35,7 +39,7 @@ const Footer = () => {
     { icon: <Instagram size={20} />, label: 'Instagram', href: 'https://www.instagram.com/madalgos/' },
     { icon: <Youtube size={20} />, label: 'YouTube', href: 'https://www.youtube.com/c/madalgos' },
     { icon: <TelegramIcon />, label: 'Telegram', href: 'https://t.me/madalgos' },
-    { icon: <WhatsAppIcon />, label: 'WhatsApp', href: 'https://api.whatsapp.com/send/?phone=917032257346&text&type=phone_number&app_absent=0' },
+    { icon: <WhatsAppIcon />, label: 'WhatsApp', href: `${WHATSAPP_BASE}919599204039&text=&type=phone_number&app_absent=0` },
   ];
 
   return (
@@ -127,7 +131,7 @@ const Footer = () => {
           <div className="flex items-center gap-3 text-muted-foreground">
             <ShieldCheck size={16} className="text-primary opacity-60" />
             <p className="text-[10px] font-bold uppercase tracking-[0.2em] opacity-40">
-              © 2026 MAD ALGOS TECHNOLOGIES. BUILT FOR ENTERPRISE SCALE.
+              © 2021 MAD ALGOS TECHNOLOGIES. BUILT FOR ENTERPRISE SCALE.
             </p>
           </div>
           <div className="flex flex-wrap justify-center gap-10">

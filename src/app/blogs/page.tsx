@@ -38,9 +38,8 @@ export default async function BlogsPage() {
               Blog Space
             </p>
             <h1 className="text-3xl md:text-5xl font-bold tracking-tight text-white">
-              Industry-grade insights from{" "}
-              <span className="text-gradient-brand italic">MADAlgos</span>{" "}
-              mentors.
+              Industry-ready <span className="text-gradient-brand italic">Insights</span>{" "}
+              from MADAlgos mentors.
             </h1>
             <p className="max-w-2xl text-sm md:text-base text-muted-foreground">
               Long-form breakdowns on system design, data structures,

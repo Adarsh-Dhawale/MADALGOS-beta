@@ -28,17 +28,17 @@ const AdvantageCard = ({
 
 const Advantages = () => {
   const leftItems = [
-    { icon: <Building2 className="w-8 h-8" />, title: 'State-of-the-Art Campus' },
-    { icon: <GraduationCap className="w-8 h-8" />, title: 'UGC Approved B.Tech Degree' },
-    { icon: <Users2 className="w-8 h-8" />, title: 'Vibrant University Life' },
-    { icon: <Briefcase className="w-8 h-8" />, title: 'Interdisciplinary Curriculum' },
-    { icon: <Globe2 className="w-8 h-8" />, title: 'Fully Residential Campus' },
+    { icon: <Building2 className="w-8 h-8" />, title: 'End-to-End Prep Stack' },
+    { icon: <GraduationCap className="w-8 h-8" />, title: 'Proven Placement Track Record' },
+    { icon: <Users2 className="w-8 h-8" />, title: 'Active Learner Community' },
+    { icon: <Briefcase className="w-8 h-8" />, title: 'FAANG/MAANG Mentors ' },
+    { icon: <Globe2 className="w-8 h-8" />, title: 'Flexible 1:1 Scheduling' },
   ];
 
   const rightItems = [
     { icon: <Cpu className="w-8 h-8" />, title: 'Sessions by MAANG Engineers' },
     { icon: <Code2 className="w-8 h-8" />, title: 'Coding from Day 1' },
-    { icon: <Zap className="w-8 h-8" />, title: 'AI-First Campus' },
+    { icon: <Zap className="w-8 h-8" />, title: 'AI/ML & System Design Focus' },
     { icon: <Target className="w-8 h-8" />, title: 'CXO Masterclasses' },
     { icon: <Rocket className="w-8 h-8" />, title: 'Tech with Management' },
   ];
@@ -72,10 +72,10 @@ const Advantages = () => {
           {/* Main Content Grid */}
           <div className="grid grid-cols-1 lg:grid-cols-12 items-center gap-8 md:gap-12 lg:gap-8">
             
-            {/* Left Column: University Advantage / Enterprise Stability */}
+            {/* Left Column: MADAlgos */}
             <div className="lg:col-span-3 space-y-4 md:space-y-6 order-2 lg:order-1">
               <h3 className="text-lg md:text-xl font-black tracking-tight text-white mb-4 md:mb-6 uppercase opacity-60 text-center lg:text-left">
-                University Advantage
+                The MAD Algos Edge
               </h3>
               {leftItems.map((item, idx) => (
                 <motion.div
@@ -96,21 +96,14 @@ const Advantages = () => {
               {/* Globe Core with Glow */}
               <div className="absolute inset-0 bg-primary/10 rounded-full blur-[100px] animate-pulse-slow pointer-events-none" />
               
-              {/* Rotating Video Asset for Globe */}
+              {/* Globe: Unsplash (open-source) only — no third-party video */}
               <div className="relative w-full h-full rounded-full overflow-hidden border border-white/5 shadow-[0_0_100px_rgba(45,212,191,0.15)] bg-[#020617]">
-                 <video
-                   autoPlay
-                   muted
-                   loop
-                   playsInline
-                   className="absolute inset-0 h-full w-full object-cover opacity-80 mix-blend-screen scale-110"
-                 >
-                   {/* Clean Stylized Globe Video - placeholders or direct links */}
-                   <source src="https://video.twimg.com/tweet_video/FaWzW_2WIAAAnE1.mp4" type="video/mp4" />
-                   <source src="https://video.twimg.com/tweet_video/FRv0-pXXEAs7eJ6.mp4" type="video/mp4" />
-                   {/* High-quality stylized globe image fallback */}
-                   <img src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=1000&auto=format&fit=crop" className="opacity-40 animate-spin-slow h-full w-full object-cover" alt="Globe" />
-                 </video>
+                 <Image
+                   src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=1000&auto=format&fit=crop"
+                   alt=""
+                   fill
+                   className="object-cover opacity-80 mix-blend-screen scale-110 animate-spin-slow"
+                 />
                  
                  {/* Latitude/Longitude Grid Overlay (SVG) */}
                  <div className="absolute inset-0 z-10 opacity-20 pointer-events-none">

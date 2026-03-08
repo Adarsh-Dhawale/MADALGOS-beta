@@ -8,26 +8,16 @@ import { motion } from 'framer-motion';
 const Hero = () => {
   return (
     <section className="bg-background relative min-h-screen flex flex-col overflow-hidden">
-      {/* Premium Video Background Layer */}
+      {/* Background: Unsplash (open-source) — no third-party video */}
       <div className="absolute inset-0 h-full w-full overflow-hidden pointer-events-none">
-        <video
-          autoPlay
-          muted
-          loop
-          playsInline
-          className="absolute inset-0 h-full w-full object-cover opacity-30 brightness-[0.6] scale-105"
-        >
-          {/* Using a high-quality tech video placeholder - similar to upGrad's holographic table style */}
-          <source src="https://video.twimg.com/tweet_video/Ff_S-S8X0AAs5yL.mp4" type="video/mp4" />
-          <source src="https://video.twimg.com/tweet_video/E0y8vVdXMAA6g0N.mp4" type="video/mp4" />
-          <source src="https://video.twimg.com/tweet_video/FAvNqHXXEAs7eJ6.mp4" type="video/mp4" />
-          {/* Fallback to high-quality Unsplash image if video fails to load or is slow */}
-          <img 
-            src="https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=2070&auto=format&fit=crop" 
-            className="h-full w-full object-cover opacity-20" 
-            alt="Enterprise Tech"
-          />
-        </video>
+        <Image
+          src="https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=2070&auto=format&fit=crop"
+          alt=""
+          fill
+          className="object-cover opacity-30 brightness-[0.6] scale-105"
+          priority
+          sizes="100vw"
+        />
         
         {/* Advanced Overlays for Premium Depth */}
         <div className="absolute inset-0 bg-gradient-to-b from-background/40 via-background/20 to-background/80" />
@@ -88,7 +78,8 @@ const Hero = () => {
                   transition={{ duration: 0.8, delay: 0.6 }}
                   className="mt-10 md:mt-14 flex flex-wrap items-center gap-4 md:gap-6"
                 >
-                  <button
+                  <a
+                    href="/contact#contact-form"
                     className="group relative inline-flex items-center justify-center h-14 md:h-16 px-10 md:px-12 text-[10px] md:text-xs font-black tracking-[0.3em] uppercase text-primary-foreground transition-all active:scale-95 w-full sm:w-auto overflow-hidden rounded-full shadow-[0_16px_40px_rgba(4,34,102,0.35)] bg-primary"
                   >
                     <span className="relative z-10 flex items-center gap-3">
@@ -96,12 +87,17 @@ const Hero = () => {
                       <ArrowRight className="h-4 w-4 md:h-5 md:w-5 transition-transform duration-300 group-hover:translate-x-2" />
                     </span>
                     <div className="absolute inset-0 bg-white opacity-0 group-hover:opacity-10 transition-opacity" />
-                  </button>
+                  </a>
                   
-                  <button className="group relative inline-flex items-center justify-center h-14 md:h-16 px-10 md:px-12 text-[10px] md:text-xs font-black tracking-[0.3em] uppercase text-white transition-all active:scale-95 w-full sm:w-auto rounded-full border border-white/10 bg-white/5 backdrop-blur-3xl hover:bg-white/10 hover:border-white/20 ring-1 ring-white/5">
+                  <a
+                    href={process.env.NEXT_PUBLIC_BROCHURE_URL || "#"}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="group relative inline-flex items-center justify-center h-14 md:h-16 px-10 md:px-12 text-[10px] md:text-xs font-black tracking-[0.3em] uppercase text-white transition-all active:scale-95 w-full sm:w-auto rounded-full border border-white/10 bg-white/5 backdrop-blur-3xl hover:bg-white/10 hover:border-white/20 ring-1 ring-white/5"
+                  >
                     <Play className="mr-3 h-3 w-3 md:h-4 md:w-4 fill-primary text-primary" />
                     Download Brochure
-                  </button>
+                  </a>
                 </motion.div>
               </div>
 

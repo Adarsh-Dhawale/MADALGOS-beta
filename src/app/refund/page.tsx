@@ -10,9 +10,9 @@ const sections = [
   {
     id: 2,
     title: "RETURN PROCESS",
-    content: `To return an item, please email customer service at contact@madalgos.in to obtain a Return Merchandise Authorization (RMA) number. After receiving a RMA number, place the item securely in its original packaging and include your proof of purchase, and mail your return to the following address:
+    content: `To return an item, please email customer service at contact@MADAlgos.in to obtain a Return Merchandise Authorization (RMA) number. After receiving a RMA number, place the item securely in its original packaging and include your proof of purchase, and mail your return to the following address:
 
-contact@madalgos.in
+contact@MADAlgos.in
 Attn: Returns / RMA #
 Nallagandla, Hyderabad 500019
 Telangana, India
@@ -32,7 +32,7 @@ Please note, you will be responsible for all return shipping charges. We strongl
   {
     id: 5,
     title: "QUESTIONS",
-    content: `If you have any questions concerning our return policy, please contact us at: contact@madalgos.in`,
+    content: `If you have any questions concerning our return policy, please contact us at: contact@MADAlgos.in`,
   },
 ];
 
@@ -117,18 +117,19 @@ export default function RefundPage() {
               <p>Telangana, India</p>
               <p className="pt-2">
                 Phone:{" "}
-                <a href="tel:+917032257346" className="text-primary hover:underline">
-                  +91-7032257346
-                </a>
+                <a href="tel:+919599204039" className="text-primary hover:underline">+91-9599204039</a>
+              </p>
+              <p>
+                WhatsApp:{" "}
+                <a href="https://api.whatsapp.com/send/?phone=919599204039&text=&type=phone_number&app_absent=0" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">+91-9599204039</a>
+                {" · "}
+                <a href="https://api.whatsapp.com/send/?phone=917032257346&text=&type=phone_number&app_absent=0" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">+91-7032257346</a>
               </p>
               <p>
                 Email:{" "}
-                <a
-                  href="mailto:contact@madalgos.in"
-                  className="text-primary hover:underline"
-                >
-                  contact@madalgos.in
-                </a>
+                <a href="mailto:contact@MADAlgos.in" className="text-primary hover:underline">contact@MADAlgos.in</a>
+                {" · "}
+                <a href="mailto:team@MADAlgos.in" className="text-primary hover:underline">team@MADAlgos.in</a>
               </p>
             </address>
           </div>

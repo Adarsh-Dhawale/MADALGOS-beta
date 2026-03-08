@@ -6,6 +6,7 @@ export interface IContactInquiry {
   subject?: string;
   message: string;
   phone?: string;
+  organization?: string;
   createdAt: Date;
 }
 
@@ -16,6 +17,7 @@ const ContactInquirySchema = new Schema<IContactInquiry>(
     subject: { type: String, default: "Contact form" },
     message: { type: String, required: true },
     phone: { type: String },
+    organization: { type: String },
     createdAt: { type: Date, default: () => new Date() },
   },
   { collection: "ContactInquiry" }

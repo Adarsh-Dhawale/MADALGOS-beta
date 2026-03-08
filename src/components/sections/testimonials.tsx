@@ -12,24 +12,26 @@ interface TestimonialData {
   image: string;
 }
 
+const MAD_ALGOS_LOGO = "/navbar_logo2_trans.png";
+
 const testimonials: TestimonialData[] = [
   {
     name: "Tim",
     role: "SDE 2 at Microsoft, Redmond",
     content: "The feedback from MAD Algos was invaluable. Each mock was professional and challenging, mirroring the intensity of top-tier enterprise interviews. I aced my Microsoft transition thanks to their strategic guidance.",
-    image: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=200&h=200&auto=format&fit=crop",
+    image: MAD_ALGOS_LOGO,
   },
   {
     name: "Shailendra",
     role: "SDE 2 at Amazon & SDE 4 at Walmart",
     content: "Navigating complex career transitions was made simple with MAD Algos. The mentor-led approach and enterprise-grade frameworks provided the clarity I needed to crack multiple offers at scale.",
-    image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?q=80&w=200&h=200&auto=format&fit=crop",
+    image: MAD_ALGOS_LOGO,
   },
   {
     name: "Avinash",
     role: "Samsung & JPMorgan Chase Lead",
     content: "The investment in MAD Algos was the highest ROI decision of my career. The depth of their technical ecosystem and the quality of global mentorship is unmatched in the B2B space.",
-    image: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?q=80&w=200&h=200&auto=format&fit=crop",
+    image: MAD_ALGOS_LOGO,
   }
 ];
 
@@ -44,12 +46,12 @@ const TestimonialCard = ({ testimonial, index }: { testimonial: TestimonialData,
     >
       {/* Profile Image & Logo Overlay */}
       <div className="absolute top-0 left-12 -translate-y-1/2 w-32 h-32">
-        <div className="relative w-full h-full rounded-[2.5rem] border-[6px] border-slate-950 shadow-2xl overflow-hidden group-hover:border-primary/50 transition-all duration-700">
+        <div className="relative w-full h-full rounded-[2.5rem] border-[6px] border-slate-950 shadow-2xl overflow-hidden group-hover:border-primary/50 transition-all duration-700 bg-slate-900/80 flex items-center justify-center p-4">
           <Image
             src={testimonial.image}
-            alt={testimonial.name}
+            alt="MAD Algos"
             fill
-            className="object-cover scale-105 group-hover:scale-110 transition-transform duration-700 grayscale group-hover:grayscale-0 opacity-80 group-hover:opacity-100"
+            className="object-contain scale-95 group-hover:scale-100 transition-transform duration-700 opacity-90 group-hover:opacity-100"
           />
         </div>
         {/* MAD Algos Logo Badge Overlay */}
