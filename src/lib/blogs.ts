@@ -6,7 +6,7 @@ export type Blog = BlogDocument;
 
 export async function getAllBlogs(): Promise<Blog[]> {
   await connectDB();
-  const docs = await BlogModel.find().sort({ publishDate: -1 }).lean<BlogDocument>().exec();
+  const docs = await BlogModel.find().sort({ publishDate: -1 }).lean<BlogDocument[]>().exec();
   return docs;
 }
 
