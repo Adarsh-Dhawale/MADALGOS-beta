@@ -1,0 +1,87 @@
+# MAD Algos – Build and deploy Next.js to Azure App Service
+# Trigger: push to main
+# Requires: Variable group "madalgos-production-secrets" and Azure service connection
+
+trigger:
+  branches:
+    include:
+      - main
+
+variables:
+  nodeVersion: '20'
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+stages:
+  - stage: Build
+    jobs:
+      - job: BuildJob
+        variables:
+          - group: madalgos-production-secrets
+        steps:
+          - task: NodeTool@0
+            inputs:
+              versionSpec: $(nodeVersion)
+            displayName: 'Install Node.js'
+
+          - script: npm ci
+            displayName: 'npm ci'
+
+          - script: npm run build
+            env:
+              MONGODB_URI: $(MONGODB_URI)
+              NEXT_PUBLIC_RECAPTCHA_SITE_KEY: $(NEXT_PUBLIC_RECAPTCHA_SITE_KEY)
+            displayName: 'Build Next.js'
+
+          - script: |
+              mkdir -p deploy
+              cp -r .next/standalone/. deploy/
+              rm -rf deploy/.next
+              cp -r .next deploy/.next
+              rm -rf deploy/.next/standalone
+              cp -r .next/static/. deploy/.next/static/
+              cp -r public deploy/public
+            displayName: 'Prepare deployment folder'
+
+          - task: ArchiveFiles@2
+            inputs:
+              rootFolderOrFile: '$(System.DefaultWorkingDirectory)/deploy'
+              includeRootFolder: false
+              archiveType: 'zip'
+              archiveFile: '$(Build.ArtifactStagingDirectory)/deploy.zip'
+              replaceExistingArchive: true
+            displayName: 'Zip deployment'
+
+          - task: PublishBuildArtifacts@1
+            inputs:
+              PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+              ArtifactName: 'nextjs-build'
+              publishLocation: 'Container'
+            displayName: 'Publish build artifact'
+
+  - stage: Deploy
+    dependsOn: Build
+    condition: succeeded()
+    jobs:
+      - deployment: DeployToAzure
+        environment: 'production'
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                - task: DownloadBuildArtifacts@1
+                  inputs:
+                    buildType: 'current'
+                    downloadType: 'single'
+                    artifactName: 'nextjs-build'
+                    downloadPath: '$(System.ArtifactsDirectory)'
+                  displayName: 'Download artifact'
+
+                - task: AzureWebApp@1
+                  inputs:
+                    azureSubscription: '<your-service-connection-name>'
+                    appType: 'webAppLinux'
+                    appName: 'MADAlgosServiceBeta'
+                    package: '$(System.ArtifactsDirectory)/nextjs-build/deploy.zip'
+                  displayName: 'Deploy to Azure App Service'

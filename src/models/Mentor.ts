@@ -1,4 +1,4 @@
-import mongoose, { Schema, model, models } from "mongoose";
+import mongoose, { Schema, model, models, Document } from "mongoose";
 import {
   CareerCompany,
   CareerHistory,
@@ -7,7 +7,7 @@ import {
   MentorFeedback,
 } from "@/lib/mentors";
 
-export interface MentorDocument extends Mentor {}
+type MentorDocument = Document;
 
 const CareerCompanySchema = new Schema<CareerCompany>(
   {
