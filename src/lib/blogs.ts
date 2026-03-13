@@ -12,7 +12,7 @@ export async function getAllBlogs(): Promise<Blog[]> {
 
 export async function getBlogById(id: number): Promise<Blog | null> {
   await connectDB();
-  const doc = await BlogModel.findOne({ id }).lean<BlogDocument>().exec();
+  const doc = await BlogModel.findOne({ id }).lean<BlogDocument | null>().exec();
   return doc;
 }
 
