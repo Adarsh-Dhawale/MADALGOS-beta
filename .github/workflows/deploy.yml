@@ -37,9 +37,12 @@ jobs:
           cp -r .next/static/. deploy/.next/static/
           cp -r public deploy/public
 
+      - name: Zip without node_modules
+        run: cd deploy && zip -r ../deploy.zip . -x "node_modules/*"
+
       - name: Deploy to Azure
         uses: azure/webapps-deploy@v3
         with:
           app-name: MADAlgosServiceBeta
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_B2B95DFF0A5E4D85A9E235EF83667A27 }}
-          package: deploy
+          package: deploy.zip
