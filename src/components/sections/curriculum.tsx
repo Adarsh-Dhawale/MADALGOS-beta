@@ -258,7 +258,7 @@ const Curriculum = () => {
             viewport={{ once: true }}
             className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4 md:mb-5 tracking-tight leading-none whitespace-nowrap"
           >
-            One Degree, <span className="text-gradient-brand">Three Pathways</span>
+            One Degree, <span className="text-gradient-brand">Two Pathways</span>
           </motion.h2>
           <motion.p 
             initial={{ opacity: 0, y: 20 }}
@@ -266,11 +266,11 @@ const Curriculum = () => {
             viewport={{ once: true }}
             className="text-muted-foreground text-sm md:text-base lg:text-lg font-medium max-w-none mx-auto tracking-tight opacity-70 leading-relaxed whitespace-nowrap"
           >
-             Whether it&apos;s a MAANG job, your own startup, or a global PhD, we&apos;ve built the track for you.
+             Whether it&apos;s a MAANG job or a global PhD, we&apos;ve built the track for you.
           </motion.p>
         </div>
 
-        {/* One Degree, Three Pathways cards - collapsible accordion */}
+        {/* One Degree, Two Pathways cards - collapsible accordion */}
         <div className="mt-10 md:mt-16 space-y-6 md:space-y-8 max-w-6xl mx-auto">
           {[
             {
@@ -295,26 +295,6 @@ const Curriculum = () => {
             },
             {
               id: 2,
-              title: "Startup Support Program",
-              description:
-                "A 7-semester Startup Mastery track offering mentorship, incubation, and expert guidance — with funding support for promising ventures, empowering you to launch and scale your startup while earning your degree.",
-              images: [
-                {
-                  src: "https://images.unsplash.com/photo-1520607162513-77705c0f0d4a?q=80&w=800&auto=format&fit=crop",
-                  alt: "Startup pitch",
-                },
-                {
-                  src: "https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&w=800&auto=format&fit=crop",
-                  alt: "Founders working",
-                },
-                {
-                  src: "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?q=80&w=800&auto=format&fit=crop",
-                  alt: "Mentorship session",
-                },
-              ],
-            },
-            {
-              id: 3,
               title: "Research & Higher Studies Advantage",
               description:
                 "Master research, publishing, and academic writing skills while preparing for GRE, TOEFL, IELTS, SOPs, and scholarships — your pathway to top global universities and research careers.",

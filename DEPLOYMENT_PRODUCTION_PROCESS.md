@@ -119,8 +119,9 @@ The pipeline needs build-time secrets in a **Variable group**.
 
    | Name | Value | Secret |
    |------|--------|--------|
-   | `MONGODB_URI` | Your Cosmos DB / MongoDB connection string | Yes |
-   | `NEXT_PUBLIC_RECAPTCHA_SITE_KEY` | Your ReCAPTCHA site key | Yes |
+| `MONGODB_URI` | Your Cosmos DB / MongoDB connection string | Yes |
+| `NEXT_PUBLIC_RECAPTCHA_SITE_KEY` | Your ReCAPTCHA site key | Yes |
+| `NEXT_PUBLIC_BROCHURE_URL` | Full brochure PDF URL (e.g. Google Drive or CDN link) so "Download Brochure" works in production | No (but required for brochure button) |
 
 6. Click **Save**.
 
