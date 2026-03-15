@@ -59,6 +59,6 @@ jobs:
       - name: Deploy to Azure
         uses: azure/webapps-deploy@v3
         with:
-          app-name: MADAlgosServiceBeta
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_B2B95DFF0A5E4D85A9E235EF83667A27 }}
+          app-name: 'MADAlgosService'
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_70A88810E7BC48F6A5823C2A113053C2 }}
           package: deploy.zip
