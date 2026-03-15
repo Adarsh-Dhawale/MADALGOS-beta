@@ -1,11 +1,29 @@
 "use client";
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { ChevronRight, Globe, Shield, Zap, ArrowRight, Play, Server, Database, Lock } from 'lucide-react';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
 
 const Hero = () => {
+  // Brochure URL: use build-time env first, then fetch from API (server env) so production works without rebuild
+  const [brochureUrl, setBrochureUrl] = useState<string | null>(
+    () => process.env.NEXT_PUBLIC_BROCHURE_URL || null
+  );
+
+  useEffect(() => {
+    if (brochureUrl) return; // already have from build
+    fetch("/api/public-config")
+      .then((r) => r.json())
+      .then((data: { brochureUrl?: string | null }) => {
+        if (data.brochureUrl) setBrochureUrl(data.brochureUrl);
+      })
+      .catch(() => {});
+  }, [brochureUrl]);
+
+  const brochureHref = brochureUrl || "/contact";
+  const isExternalBrochure = !!brochureUrl;
+
   return (
     <section className="bg-background relative min-h-screen flex flex-col overflow-hidden">
       {/* Background: Unsplash (open-source) — no third-party video */}
@@ -90,9 +108,9 @@ const Hero = () => {
                   </a>
                   
                   <a
-                    href={process.env.NEXT_PUBLIC_BROCHURE_URL ?? "/contact"}
-                    target={process.env.NEXT_PUBLIC_BROCHURE_URL ? "_blank" : undefined}
-                    rel={process.env.NEXT_PUBLIC_BROCHURE_URL ? "noopener noreferrer" : undefined}
+                    href={brochureHref}
+                    target={isExternalBrochure ? "_blank" : undefined}
+                    rel={isExternalBrochure ? "noopener noreferrer" : undefined}
                     className="group relative inline-flex items-center justify-center h-14 md:h-16 px-10 md:px-12 text-[10px] md:text-xs font-black tracking-[0.3em] uppercase text-white transition-all active:scale-95 w-full sm:w-auto rounded-full border border-white/10 bg-white/5 backdrop-blur-3xl hover:bg-white/10 hover:border-white/20 ring-1 ring-white/5"
                   >
                     <Play className="mr-3 h-3 w-3 md:h-4 md:w-4 fill-primary text-primary" />
