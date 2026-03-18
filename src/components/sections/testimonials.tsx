@@ -4,6 +4,7 @@ import React from 'react';
 import Image from 'next/image';
 import { Quote, CheckCircle2 } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { LEGACY_TESTIMONIALS, MAD_ALGOS_LOGO } from "@/lib/legacy-testimonials";
 
 interface TestimonialData {
   name: string;
@@ -11,29 +12,6 @@ interface TestimonialData {
   content: string;
   image: string;
 }
-
-const MAD_ALGOS_LOGO = "/navbar_logo2_trans.png";
-
-const testimonials: TestimonialData[] = [
-  {
-    name: "Tim",
-    role: "SDE 2 at Microsoft, Redmond",
-    content: "The feedback from MAD Algos was invaluable. Each mock was professional and challenging, mirroring the intensity of top-tier enterprise interviews. I aced my Microsoft transition thanks to their strategic guidance.",
-    image: MAD_ALGOS_LOGO,
-  },
-  {
-    name: "Shailendra",
-    role: "SDE 2 at Amazon & SDE 4 at Walmart",
-    content: "Navigating complex career transitions was made simple with MAD Algos. The mentor-led approach and enterprise-grade frameworks provided the clarity I needed to crack multiple offers at scale.",
-    image: MAD_ALGOS_LOGO,
-  },
-  {
-    name: "Avinash",
-    role: "Samsung & JPMorgan Chase Lead",
-    content: "The investment in MAD Algos was the highest ROI decision of my career. The depth of their technical ecosystem and the quality of global mentorship is unmatched in the B2B space.",
-    image: MAD_ALGOS_LOGO,
-  }
-];
 
 const TestimonialCard = ({ testimonial, index }: { testimonial: TestimonialData, index: number }) => {
   return (
@@ -100,6 +78,24 @@ const TestimonialCard = ({ testimonial, index }: { testimonial: TestimonialData,
 };
 
 const Testimonials = () => {
+  const [items, setItems] = React.useState<TestimonialData[]>(LEGACY_TESTIMONIALS);
+
+  React.useEffect(() => {
+    fetch("/api/testimonials")
+      .then((r) => r.json())
+      .then((data: { testimonials?: TestimonialData[] }) => {
+        if (Array.isArray(data.testimonials) && data.testimonials.length) {
+          setItems(
+            data.testimonials.map((t) => ({
+              ...t,
+              image: t.image || MAD_ALGOS_LOGO,
+            }))
+          );
+        }
+      })
+      .catch(() => null);
+  }, []);
+
   return (
     <section className="bg-background py-32 px-6 md:px-12 relative overflow-hidden border-t border-white/5">
       {/* Decorative Orbs */}
@@ -130,7 +126,7 @@ const Testimonials = () => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-16 lg:gap-20">
-          {testimonials.map((item, index) => (
+          {items.map((item, index) => (
             <TestimonialCard key={index} testimonial={item} index={index} />
           ))}
         </div>

@@ -15,8 +15,8 @@ export default function MentorsGrid({ mentors }: MentorsGridProps) {
   return (
     <>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-10">
-        {visible.map((mentor) => (
-          <MentorCard key={mentor.name + mentor.joined} {...mentor} />
+        {visible.map((mentor, index) => (
+          <MentorCard key={`${mentor.name}-${mentor.joined}-${index}`} {...mentor} />
         ))}
       </div>
 

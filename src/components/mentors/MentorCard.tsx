@@ -27,6 +27,13 @@ export interface MentorCardProps {
   linkedin: string | null;
 }
 
+function splitCompanies(input: string): string[] {
+  return input
+    .split(/[,|]/g)
+    .map((s) => s.trim())
+    .filter(Boolean);
+}
+
 const expectationPoints = [
   "Fast, structured feedback on your resume and interview prep.",
   "Clear roadmap for DSA and System Design (HLD / LLD).",
@@ -52,6 +59,7 @@ export default function MentorCard(props: MentorCardProps) {
 
   const [open, setOpen] = useState(false);
   const [showFullDescription, setShowFullDescription] = useState(false);
+  const companyTags = companies ? splitCompanies(companies).slice(0, 4) : [];
 
   return (
     <div className="group relative bg-slate-950/40 backdrop-blur-3xl rounded-[2.5rem] border border-white/10 p-8 md:p-10 flex flex-col h-full shadow-[0_30px_80px_rgba(0,0,0,0.6)] transition-all duration-500 hover:border-primary/40 hover:bg-slate-900/60">
@@ -79,10 +87,17 @@ export default function MentorCard(props: MentorCardProps) {
               <span className="line-clamp-1">{headline}</span>
             </span>
           </div>
-          {companies && (
-            <p className="text-secondary/80 text-[10px] md:text-[11px] font-bold mt-1 uppercase tracking-[0.2em] line-clamp-1">
-              {companies}
-            </p>
+          {companyTags.length > 0 && (
+            <div className="mt-2 flex flex-wrap gap-2">
+              {companyTags.map((c, index) => (
+                <span
+                  key={`${c}-${index}`}
+                  className="px-3 py-1.5 rounded-2xl border border-white/10 bg-white/5 text-[10px] font-bold text-white/70 tracking-[0.18em] uppercase"
+                >
+                  {c}
+                </span>
+              ))}
+            </div>
           )}
 
           <div className="mt-3 flex flex-wrap items-center gap-3 text-[11px] text-muted-foreground uppercase tracking-[0.18em]">

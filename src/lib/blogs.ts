@@ -6,13 +6,21 @@ export type Blog = BlogDocument;
 
 export async function getAllBlogs(): Promise<Blog[]> {
   await connectDB();
-  const docs = await BlogModel.find().sort({ publishDate: -1 }).lean<BlogDocument[]>().exec();
+  const docs = await BlogModel.find({
+    $or: [{ status: "PUBLISHED" }, { status: { $exists: false } }],
+  })
+    .sort({ publishDate: -1 })
+    .lean<BlogDocument[]>()
+    .exec();
   return docs;
 }
 
 export async function getBlogById(id: number): Promise<Blog | null> {
   await connectDB();
-  const doc = await BlogModel.findOne({ id }).lean<BlogDocument | null>().exec();
+  const doc = await BlogModel.findOne({
+    id,
+    $or: [{ status: "PUBLISHED" }, { status: { $exists: false } }],
+  }).lean<BlogDocument | null>().exec();
   return doc;
 }
 

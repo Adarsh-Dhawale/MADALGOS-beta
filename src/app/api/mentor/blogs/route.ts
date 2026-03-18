@@ -1,0 +1,94 @@
+import { NextResponse } from "next/server";
+import { z } from "zod";
+import { connectDB } from "@/lib/mongodb";
+import BlogModel from "@/models/Blog";
+import UserModel from "@/models/User";
+import { getSessionFromRequestCookies } from "@/lib/auth";
+
+const BodySchema = z.object({
+  title: z.string().min(5).max(200),
+  bannerImageLink: z.string().url().nullable().optional(),
+  descriptionDetails: z.string().min(50).max(8000),
+});
+
+async function requireMentor() {
+  const session = await getSessionFromRequestCookies();
+  if (!session || session.role !== "MENTOR") return null;
+  return session;
+}
+
+export async function POST(req: Request) {
+  const session = await requireMentor();
+  if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+
+  const json = await req.json().catch(() => null);
+  const parsed = BodySchema.safeParse(json);
+  if (!parsed.success) {
+    return NextResponse.json({ error: "Invalid data" }, { status: 400 });
+  }
+
+  await connectDB();
+  const user = await UserModel.findById(session.uid).exec();
+  if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+
+  const max = await BlogModel.findOne().sort({ id: -1 }).lean().exec();
+  const nextId = (max?.id ?? 0) + 1;
+
+  const now = new Date();
+  await BlogModel.create({
+    id: nextId,
+    title: parsed.data.title,
+    publisher: "MADAlgos",
+    bannerImageLink: parsed.data.bannerImageLink ?? null,
+    descriptionId: `mentor-${session.uid}-${nextId}`,
+    partitionKey: "0",
+    publishDate: now.toISOString(),
+    authorId: 0,
+    status: "PENDING_REVIEW",
+    reviewStatus: "PENDING_REVIEW",
+    submittedByUid: session.uid,
+    rejectionReason: null,
+    likes: 0,
+    reviewer: "",
+    reviewDate: "",
+    descriptionDetails: parsed.data.descriptionDetails,
+    authorDetails: {
+      firstName: user.username || user.email,
+      lastName: null,
+      dispImageLink: null,
+    },
+  });
+
+  return NextResponse.json({ ok: true });
+}
+
+export async function GET() {
+  const session = await requireMentor();
+  if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+
+  await connectDB();
+
+  const docs = await BlogModel.find({
+    $or: [
+      { submittedByUid: session.uid },
+      { descriptionId: { $regex: `^mentor-${session.uid}-` } },
+    ],
+  })
+    .sort({ publishDate: -1 })
+    .lean()
+    .exec();
+
+  return NextResponse.json({
+    ok: true,
+    blogs: docs.map((b: any) => ({
+      id: b.id,
+      title: b.title,
+      status: b.status ?? "DRAFT",
+      reviewStatus: b.reviewStatus ?? "",
+      rejectionReason: b.rejectionReason ?? null,
+      publishDate: b.publishDate,
+      reviewDate: b.reviewDate ?? "",
+    })),
+  });
+}
+

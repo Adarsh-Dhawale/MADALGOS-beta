@@ -1,0 +1,74 @@
+import mongoose, { Schema, model, models } from "mongoose";
+import type { AccountStatus, UserRole, VerificationStatus } from "@/lib/auth";
+
+export interface UserDocument {
+  email: string;
+  username: string | null;
+  role: UserRole;
+  status: "ACTIVE" | "PENDING" | "SUSPENDED";
+  accountStatus: AccountStatus;
+  verificationStatus: VerificationStatus;
+  linkedinProfileUrl: string | null;
+  authProvider: null | "password" | "google" | "password+google";
+  passwordHash: string | null;
+  googleId: string | null;
+  mentorCredentialToken: string | null;
+  mentorCredentialTokenExpiresAt: Date | null;
+  profileCompleted: boolean;
+  createdAt: Date;
+  updatedAt: Date;
+  lastLoginAt: Date | null;
+}
+
+const UserSchema = new Schema<UserDocument>(
+  {
+    email: { type: String, required: true, unique: true, index: true },
+    username: { type: String, default: null },
+    role: {
+      type: String,
+      required: true,
+      enum: ["SUPER_ADMIN", "ADMIN", "MENTOR_PENDING", "MENTOR", "STUDENT"],
+      default: "STUDENT",
+    },
+    status: {
+      type: String,
+      enum: ["ACTIVE", "PENDING", "SUSPENDED"],
+      default: "PENDING",
+    },
+    accountStatus: {
+      type: String,
+      required: true,
+      enum: [
+        "PENDING_APPLICATION",
+        "AWAITING_CREDENTIAL_SETUP",
+        "ACTIVE",
+        "REJECTED",
+        "SUSPENDED",
+      ],
+    },
+    verificationStatus: {
+      type: String,
+      required: true,
+      enum: ["UNVERIFIED", "VERIFIED"],
+    },
+    linkedinProfileUrl: { type: String, default: null },
+    authProvider: {
+      type: String,
+      default: null,
+      enum: ["password", "google", "password+google", null],
+    },
+    passwordHash: { type: String, default: null },
+    googleId: { type: String, default: null, index: true },
+    mentorCredentialToken: { type: String, default: null, index: true },
+    mentorCredentialTokenExpiresAt: { type: Date, default: null },
+    profileCompleted: { type: Boolean, default: false },
+    lastLoginAt: { type: Date, default: null },
+  },
+  { collection: "users", timestamps: true }
+);
+
+const UserModel =
+  (models.User as mongoose.Model<UserDocument>) || model<UserDocument>("User", UserSchema);
+
+export default UserModel;
+

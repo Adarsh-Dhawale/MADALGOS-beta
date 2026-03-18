@@ -176,8 +176,24 @@ const Header = () => {
             </div>
           </div>
 
-          {/* Action Buttons — Join Us & Log In hidden for now */}
+          {/* Action Buttons — Auth */}
           <div className="flex items-center gap-2 sm:gap-3 md:gap-4 flex-shrink-0">
+            {/* Desktop auth buttons */}
+            <div className="hidden xl:flex items-center gap-3">
+              <Link
+                href="/auth"
+                className="inline-flex items-center justify-center h-10 rounded-full border border-white/15 bg-white/5 px-5 text-[11px] font-black tracking-[0.22em] uppercase text-white hover:bg-white/10 hover:border-white/30 transition-all active:scale-95"
+              >
+                Log In
+              </Link>
+              <Link
+                href="/auth"
+                className="inline-flex items-center justify-center h-10 rounded-full bg-primary px-5 text-[11px] font-black tracking-[0.22em] uppercase text-slate-950 hover:brightness-110 transition-all active:scale-95 shadow-[0_14px_40px_rgba(42,181,160,0.35)]"
+              >
+                Sign Up
+              </Link>
+            </div>
+
             {/* Theme toggle - extreme right */}
             <button
               type="button"
@@ -215,6 +231,24 @@ const Header = () => {
           />
           <div className="relative max-h-[calc(100vh-120px)] overflow-y-auto rounded-[2rem] bg-slate-950/98 backdrop-blur-3xl border border-white/10 shadow-[0_60px_120px_rgba(0,0,0,1)] p-8 sm:p-10">
           <div className="space-y-10">
+            {/* Mobile auth buttons */}
+            <div className="grid grid-cols-1 gap-3">
+              <Link
+                href="/auth"
+                onClick={closeMobileMenu}
+                className="inline-flex items-center justify-center rounded-full border border-white/15 bg-white/5 px-6 py-3 text-[11px] font-black tracking-[0.22em] uppercase text-white hover:bg-white/10 hover:border-white/30 transition-all active:scale-95"
+              >
+                Log In
+              </Link>
+              <Link
+                href="/auth"
+                onClick={closeMobileMenu}
+                className="inline-flex items-center justify-center rounded-full bg-primary px-6 py-3 text-[11px] font-black tracking-[0.22em] uppercase text-slate-950 hover:brightness-110 transition-all active:scale-95 shadow-[0_14px_40px_rgba(42,181,160,0.25)]"
+              >
+                Sign Up
+              </Link>
+            </div>
+
             {NAV_ITEMS.map((item) => (
               <div key={item.name} className="space-y-6">
                 {item.dropdown ? (

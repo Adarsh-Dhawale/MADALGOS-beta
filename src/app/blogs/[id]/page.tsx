@@ -11,17 +11,13 @@ import {
   getAuthorDisplayName,
 } from "@/lib/blogs";
 
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 interface BlogPageProps {
   params: Promise<{
     id: string;
   }>;
-}
-
-export async function generateStaticParams() {
-  const blogs = await getAllBlogs();
-  return blogs.map((blog) => ({
-    id: blog.id.toString(),
-  }));
 }
 
 export async function generateMetadata({ params }: BlogPageProps) {
